@@ -1,12 +1,19 @@
 package me.kokostrike.creatortools;
 
 import com.mojang.brigadier.CommandDispatcher;
+import me.shedaniel.clothconfig2.api.ConfigBuilder;
+import me.shedaniel.clothconfig2.api.ConfigCategory;
+import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import me.shedaniel.clothconfig2.gui.ClothConfigScreen;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.command.CommandRegistryAccess;
@@ -29,6 +36,11 @@ import java.util.concurrent.TimeUnit;
 public class CreatorTools implements ModInitializer {
 	public static final String MOD_ID = "creatortools";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+	private static int seconds = 0;
+
+	private boolean isOpen = true;
+
 
 	private List<ScheduledExecutorService> tasks = new ArrayList<>();
 
@@ -58,6 +70,10 @@ public class CreatorTools implements ModInitializer {
 						task.shutdown();
 					}
 					return 0;
+				})))
+				.then(ClientCommandManager.literal("openGUI").executes((context -> {
+					buildScreen();
+					return 0;
 				}))).executes((context -> {
 					sendMessage("Test 2");
 					return 0;
@@ -78,5 +94,29 @@ public class CreatorTools implements ModInitializer {
 		MinecraftClient.getInstance().send(() -> MinecraftClient.getInstance().getToastManager().add(new SystemToast(SystemToast.Type.NARRATOR_TOGGLE, Text.of(title), Text.of(subtitle))));
 
 		return true;
+	}
+
+	private void buildScreen() {
+		ConfigBuilder builder = ConfigBuilder.create()
+				.setParentScreen(MinecraftClient.getInstance().currentScreen)
+				.setTitle(Text.literal("Creator Tools"));
+		builder.setSavingRunnable(() -> {
+			LOGGER.info(String.format("The amount of seconds are: %s", seconds));
+		});
+
+		ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
+		ConfigEntryBuilder entryBuilder = builder.entryBuilder();
+		general.addEntry(entryBuilder.startIntField(Text.literal("Seconds"), seconds)
+				.setDefaultValue(0)
+				.setTooltip(Text.literal("Second value!"))
+				.setSaveConsumer(s -> seconds = s)
+				.build());
+
+		ClientTickEvents.START_CLIENT_TICK.register((listener) -> {
+			if (isOpen) {
+				listener.setScreen(builder.build());
+				isOpen = false;
+			}
+		});
 	}
 }
