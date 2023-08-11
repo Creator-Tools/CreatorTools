@@ -31,7 +31,6 @@ public class CreatorTools implements ModInitializer {
 		loadConfig();
 		loadCommands();
 		loadManagers();
-		System.out.println(MinecraftClient.getInstance().options);
 
 		LOGGER.info("CreatorTools has been enabled!");
 	}
