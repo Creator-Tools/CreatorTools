@@ -11,7 +11,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -20,17 +19,16 @@ public class ConfigScreen {
     private boolean isOpen = false;
 
     private final CreatorTools mod;
-    private List<String> reminderList = new ArrayList<>();
-    private TimeUnit selectedTimeUnit = TimeUnit.SECONDS;
-    private boolean streamerMode = false;
-    private boolean enableReminders = false;
-    private String splitCharacter = "/";
 
 
     private Screen screen;
 
+    private ConfigSettings configSettings;
+
     public ConfigScreen(CreatorTools mod) {
         this.mod = mod;
+        this.configSettings = ConfigSettingsProvider.getConfigSettings();
+
         ClientTickEvents.START_CLIENT_TICK.register((listener) -> {
             if (isOpen) {
                 listener.setScreen(screen);
@@ -49,46 +47,46 @@ public class ConfigScreen {
                 .setParentScreen(parent)
                 .setTitle(Text.literal("Creator Tools"));
         builder.setSavingRunnable(() -> {
-            mod.getLOGGER().info("SAVING VARIABLES!!!");
+            ConfigSettingsProvider.updateSettings(configSettings);
         });
 
         ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
         // General
-        general.addEntry(entryBuilder.startBooleanToggle(Text.literal("Streamer Mode"), streamerMode)
+        general.addEntry(entryBuilder.startBooleanToggle(Text.literal("Streamer Mode"), configSettings.isStreamerMode())
                 .setDefaultValue(false)
-                .setSaveConsumer(s -> streamerMode = s)
+                .setSaveConsumer(s -> configSettings.setStreamerMode(s))
                 .build());
-        general.addEntry(entryBuilder.startStrField(Text.literal("Split Character"), splitCharacter)
+        general.addEntry(entryBuilder.startStrField(Text.literal("Split Character"), configSettings.getSplitCharacter())
                 .setDefaultValue("/")
-                .setSaveConsumer(s -> splitCharacter = s)
+                .setSaveConsumer(s -> configSettings.setSplitCharacter(s))
                 .setTooltip(Text.of("Character used to split the title and subtitle in the reminders."))
                 .build());
 
         // Reminders
         ConfigCategory reminders = builder.getOrCreateCategory(Text.literal("Reminders"));
-        reminders.addEntry(entryBuilder.startBooleanToggle(Text.literal("Enable Reminders"), enableReminders)
+        reminders.addEntry(entryBuilder.startBooleanToggle(Text.literal("Enable Reminders"), configSettings.isEnableReminders())
                 .setDefaultValue(false)
-                .setSaveConsumer(s -> enableReminders = s)
+                .setSaveConsumer(s -> configSettings.setEnableReminders(s))
                 .build());
 
         reminders.addEntry(entryBuilder.startIntField(Text.literal("Reminder Interval"), minutes)
                 .setDefaultValue(minutes)
-                .setSaveConsumer(s -> minutes = s)
+                .setSaveConsumer(s -> configSettings.setTimeInterval(s))
                 .setTooltip(Text.of("Interval between reminders."))
                 .build());
 
-        reminders.addEntry(entryBuilder.startEnumSelector(Text.literal("Time Unit"), TimeUnit.class, selectedTimeUnit)
-                .setDefaultValue(TimeUnit.MINUTES)
-                .setSaveConsumer(s -> selectedTimeUnit = s)
+        reminders.addEntry(entryBuilder.startEnumSelector(Text.literal("Time Unit"), TimeUnit.class, configSettings.getSelectedTimeUnit())
+                .setDefaultValue(TimeUnit.SECONDS)
+                .setSaveConsumer(s -> configSettings.setSelectedTimeUnit(s))
                 .setTooltip(Text.of("Time unit for the reminder interval."))
                 .build());
 
-        reminders.addEntry(entryBuilder.startStrList(Text.literal("Reminders"), reminderList)
-                .setDefaultValue(reminderList)
-                .setSaveConsumer(s -> reminderList = s)
-                .setTooltip(Text.of("Reminders to be displayed in the screen every couple of minutes.\nFormat: 'Title'" + splitCharacter + "'Subtitle'"))
+        reminders.addEntry(entryBuilder.startStrList(Text.literal("Reminders"), configSettings.getReminderList())
+                .setDefaultValue(new ArrayList<>())
+                .setSaveConsumer(s -> configSettings.setReminderList(s))
+                .setTooltip(Text.of("Reminders to be displayed in the screen every couple of minutes.\nFormat: 'Title'" + configSettings.getSplitCharacter() + "'Subtitle'"))
                 .build());
 
         screen = builder.build();
