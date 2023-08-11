@@ -27,13 +27,14 @@
 <br />
 <div align="center">
   <a href="https://github.com/KokoDevs/CreatorTools">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://media.discordapp.net/attachments/960225928263368745/1138402534386585680/CreatorTools.png?width=671&height=671" alt="Logo" width="100" height="100">
   </a>
 
 <h3 align="center">Creator Tools</h3>
 
   <p align="center">
-    project_description
+    A Mod for Content Creators. Addes a lot of Content Creator's utilities! <br>
+    Authors: KokoDevs, Strike24
     <br />
     <a href="https://github.com/KokoDevs/CreatorTools"><strong>Explore the docs »</strong></a>
     <br />

@@ -20,8 +20,8 @@ public class ConfigScreen {
 
     private final CreatorTools mod;
 
-    @Getter
-    private Screen configScreen;
+
+    private Screen screen;
 
     private ConfigSettings configSettings;
 
@@ -31,15 +31,20 @@ public class ConfigScreen {
 
         ClientTickEvents.START_CLIENT_TICK.register((listener) -> {
             if (isOpen) {
-                listener.setScreen(configScreen);
+                listener.setScreen(screen);
                 isOpen = false;
             }
         });
     }
 
-    public void buildAndOpen() {
+    public Screen getScreen(Screen parent) {
+        build(parent);
+        return screen;
+    }
+    public void build(Screen parent) {
         ConfigBuilder builder = ConfigBuilder.create()
-                .setParentScreen(MinecraftClient.getInstance().currentScreen)
+//                MinecraftClient.getInstance().currentScreen
+                .setParentScreen(parent)
                 .setTitle(Text.literal("Creator Tools"));
         builder.setSavingRunnable(() -> {
             ConfigSettingsProvider.updateSettings(configSettings);
@@ -84,11 +89,15 @@ public class ConfigScreen {
                 .setTooltip(Text.of("Reminders to be displayed in the screen every couple of minutes.\nFormat: 'Title'" + configSettings.getSplitCharacter() + "'Subtitle'"))
                 .build());
 
-        open(builder);
+        screen = builder.build();
+
+    }
+    public void buildAndOpen() {
+        build(MinecraftClient.getInstance().currentScreen);
+        open();
     }
 
-    private void open(ConfigBuilder builder) {
-        configScreen = builder.build();
+    private void open() {
         isOpen = true;
     }
 
