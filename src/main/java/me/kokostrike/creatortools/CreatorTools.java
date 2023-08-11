@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.kokostrike.creatortools.commands.CreatorToolsCommand;
 import me.kokostrike.creatortools.config.ConfigScreen;
 import me.kokostrike.creatortools.config.ConfigSettingsProvider;
+import me.kokostrike.creatortools.managers.StreamerModeManager;
 import me.kokostrike.creatortools.managers.ReminderManager;
 import net.fabricmc.api.ModInitializer;
 
@@ -23,6 +24,9 @@ public class CreatorTools implements ModInitializer {
 	@Getter
 	private ReminderManager reminderManager;
 
+	@Getter
+	private StreamerModeManager streamerModeManager;
+
 	public static Screen getScreen(Screen parent) {
 		return configScreen.getScreen(parent);
 	}
@@ -37,15 +41,16 @@ public class CreatorTools implements ModInitializer {
 		LOGGER.info("CreatorTools has been enabled!");
 	}
 
-	private void loadManagers() {
-		reminderManager = new ReminderManager();
-	}
-
 	private void loadConfig() {
 		ConfigSettingsProvider.setLogger(LOGGER);
 		ConfigSettingsProvider.load();
 
 		configScreen = new ConfigScreen(this);
+	}
+
+	private void loadManagers() {
+		streamerModeManager = new StreamerModeManager();
+        reminderManager = new ReminderManager();
 	}
 
 	private void loadCommands() {
