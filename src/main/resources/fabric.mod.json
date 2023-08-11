@@ -9,8 +9,8 @@
 		"StrikeDev"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://discord.gg/EDNMfSzJVH",
+		"sources": "https://github.com/KokoDevs/CreatorTools"
 	},
 	"license": "MIT",
 	"icon": "assets/creatortools/icon.png",
@@ -37,5 +37,12 @@
 	},
 	"suggests": {
 		"another-mod": "*"
+	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.discord": "https://discord.gg/EDNMfSzJVH"
+			}
+		}
 	}
 }
