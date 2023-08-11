@@ -1,6 +1,9 @@
 package me.kokostrike.creatortools;
 
 import com.mojang.brigadier.CommandDispatcher;
+import lombok.Getter;
+import me.kokostrike.creatortools.commands.CreatorToolsCommand;
+import me.kokostrike.creatortools.config.ConfigScreen;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -35,88 +38,29 @@ import java.util.concurrent.TimeUnit;
 
 public class CreatorTools implements ModInitializer {
 	public static final String MOD_ID = "creatortools";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	private static int seconds = 0;
+	@Getter
+    private final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	private boolean isOpen = true;
+	@Getter
+	private ConfigScreen configScreen;
 
-
-	private List<ScheduledExecutorService> tasks = new ArrayList<>();
 
 	@Override
 	public void onInitialize() {
-		LOGGER.info("Hello Fabric world!");
+		LOGGER.info("CreatorTools has been enabled!");
 
-		ClientCommandRegistrationCallback.EVENT.register(this::registerClientCommand);
+		loadConfig();
+
+		loadCommands();
 	}
 
-	private void registerClientCommand(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
-		dispatcher.register(ClientCommandManager.literal("creatortools")
-				.then(ClientCommandManager.literal("test").executes((context -> {
-					showToast("Toast!", "What a great toast!");
-					runCommand("gamemode survival");
-					return 0;
-
-				})))
-				.then(ClientCommandManager.literal("run").executes((context -> {
-					ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-					executor.scheduleAtFixedRate(() -> showToast("Toast!", "What a great toast!"), 0, 15, TimeUnit.SECONDS);
-					tasks.add(executor);
-					return 0;
-				})))
-				.then(ClientCommandManager.literal("stopAll").executes((context -> {
-					for (ScheduledExecutorService task : tasks) {
-						task.shutdown();
-					}
-					return 0;
-				})))
-				.then(ClientCommandManager.literal("openGUI").executes((context -> {
-					buildScreen();
-					return 0;
-				}))).executes((context -> {
-					sendMessage("Test 2");
-					return 0;
-				})));
+	private void loadConfig() {
+		configScreen = new ConfigScreen(this);
 	}
 
-	private void runCommand(String command) {
-		ClientPlayerEntity player = MinecraftClient.getInstance().player;
-		if (player == null) return;
-		player.networkHandler.sendCommand(command);
+	private void loadCommands() {
+		new CreatorToolsCommand(this);
 	}
 
-	private void sendMessage(String message) {
-		if (MinecraftClient.getInstance().player != null) MinecraftClient.getInstance().player.sendMessage(Text.of(message));
-	}
-
-	private boolean showToast(String title, String subtitle) {
-		MinecraftClient.getInstance().send(() -> MinecraftClient.getInstance().getToastManager().add(new SystemToast(SystemToast.Type.NARRATOR_TOGGLE, Text.of(title), Text.of(subtitle))));
-
-		return true;
-	}
-
-	private void buildScreen() {
-		ConfigBuilder builder = ConfigBuilder.create()
-				.setParentScreen(MinecraftClient.getInstance().currentScreen)
-				.setTitle(Text.literal("Creator Tools"));
-		builder.setSavingRunnable(() -> {
-			LOGGER.info(String.format("The amount of seconds are: %s", seconds));
-		});
-
-		ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
-		ConfigEntryBuilder entryBuilder = builder.entryBuilder();
-		general.addEntry(entryBuilder.startIntField(Text.literal("Seconds"), seconds)
-				.setDefaultValue(0)
-				.setTooltip(Text.literal("Second value!"))
-				.setSaveConsumer(s -> seconds = s)
-				.build());
-
-		ClientTickEvents.START_CLIENT_TICK.register((listener) -> {
-			if (isOpen) {
-				listener.setScreen(builder.build());
-				isOpen = false;
-			}
-		});
-	}
 }
