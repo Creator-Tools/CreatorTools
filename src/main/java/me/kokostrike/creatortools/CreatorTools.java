@@ -43,7 +43,11 @@ public class CreatorTools implements ModInitializer {
     private final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	@Getter
-	private ConfigScreen configScreen;
+	private static ConfigScreen configScreen;
+
+	public static Screen getScreen(Screen parent) {
+		return configScreen.getScreen(parent);
+	}
 
 
 	@Override
@@ -51,7 +55,6 @@ public class CreatorTools implements ModInitializer {
 		LOGGER.info("CreatorTools has been enabled!");
 
 		loadConfig();
-
 		loadCommands();
 	}
 

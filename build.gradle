@@ -20,6 +20,7 @@ repositories {
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url "https://maven.terraformersmc.com/releases/" }
 	maven { url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1" }
+	maven { url = "https://maven.terraformersmc.com/releases/com/terraformersmc/modmenu/" }
 }
 
 loom {
@@ -61,6 +62,11 @@ dependencies {
 
 	modApi("me.shedaniel.cloth:cloth-config-fabric:11.1.106") {
 		exclude(group: "net.fabricmc.fabric-api")
+	}
+
+	// Mod Menu
+	modImplementation("com.terraformersmc:modmenu:7.2.1") {
+		transitive = false
 	}
 
 	modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:1.1.2")
