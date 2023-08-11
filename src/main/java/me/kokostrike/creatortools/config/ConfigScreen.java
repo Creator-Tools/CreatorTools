@@ -7,7 +7,10 @@ import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.DirectConnectScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -29,11 +32,14 @@ public class ConfigScreen {
         this.mod = mod;
         this.configSettings = ConfigSettingsProvider.getConfigSettings();
 
+
+
         ClientTickEvents.START_CLIENT_TICK.register((listener) -> {
             if (isOpen) {
                 listener.setScreen(screen);
                 isOpen = false;
             }
+
         });
     }
 

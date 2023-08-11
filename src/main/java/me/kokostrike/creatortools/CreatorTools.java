@@ -4,8 +4,10 @@ import lombok.Getter;
 import me.kokostrike.creatortools.commands.CreatorToolsCommand;
 import me.kokostrike.creatortools.config.ConfigScreen;
 import me.kokostrike.creatortools.config.ConfigSettingsProvider;
+import me.kokostrike.creatortools.managers.StreamerModeManager;
 import net.fabricmc.api.ModInitializer;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,8 @@ public class CreatorTools implements ModInitializer {
 	public void onInitialize() {
 		loadConfig();
 		loadCommands();
+		loadManagers();
+		System.out.println(MinecraftClient.getInstance().options);
 
 		LOGGER.info("CreatorTools has been enabled!");
 	}
@@ -37,6 +41,10 @@ public class CreatorTools implements ModInitializer {
 		ConfigSettingsProvider.load();
 
 		configScreen = new ConfigScreen(this);
+	}
+
+	private void loadManagers() {
+		new StreamerModeManager();
 	}
 
 	private void loadCommands() {
