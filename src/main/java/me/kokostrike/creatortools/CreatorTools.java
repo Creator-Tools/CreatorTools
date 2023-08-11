@@ -6,6 +6,7 @@ import me.kokostrike.creatortools.config.ConfigScreen;
 import me.kokostrike.creatortools.config.ConfigSettingsProvider;
 import net.fabricmc.api.ModInitializer;
 
+import net.minecraft.client.gui.screen.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
