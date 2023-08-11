@@ -24,6 +24,9 @@ public class CreatorTools implements ModInitializer {
 	@Getter
 	private ReminderManager reminderManager;
 
+	@Getter
+	private StreamerModeManager streamerModeManager;
+
 	public static Screen getScreen(Screen parent) {
 		return configScreen.getScreen(parent);
 	}
@@ -46,7 +49,7 @@ public class CreatorTools implements ModInitializer {
 	}
 
 	private void loadManagers() {
-		new StreamerModeManager();
+		streamerModeManager = new StreamerModeManager();
         reminderManager = new ReminderManager();
 	}
 
