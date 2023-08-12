@@ -42,7 +42,11 @@ public class CreatorToolsCommand {
                     mod.getConfigScreen().buildAndOpen();
                     return 0;
                 })));
-        dispatcher.register(ClientCommandManager.literal("ct").redirect(commandNode));
+        dispatcher.register(ClientCommandManager.literal("ct").
+                executes((context -> {
+                    mod.getConfigScreen().buildAndOpen();
+                    return 0;
+                })));
     }
 
     // helper functions

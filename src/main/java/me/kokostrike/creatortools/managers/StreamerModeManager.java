@@ -11,6 +11,7 @@ import java.util.Objects;
 public class StreamerModeManager {
     private final ConfigSettings configSettings;
     private String lastServerBeforeStreamerMode = "";
+    private boolean changed;
     public StreamerModeManager() {
         this.configSettings = ConfigSettingsProvider.getConfigSettings();
 
@@ -19,8 +20,10 @@ public class StreamerModeManager {
                 if (!listener.options.lastServer.equals("Streamer Mode is enabled!") && configSettings.isStreamerMode()) {
                     lastServerBeforeStreamerMode = listener.options.lastServer;
                     listener.options.lastServer = "Streamer Mode is enabled!";
-                } else if (!listener.options.lastServer.equals(lastServerBeforeStreamerMode) && !configSettings.isStreamerMode()) {
+                    changed = true;
+                } else if (!listener.options.lastServer.equals(lastServerBeforeStreamerMode) && !configSettings.isStreamerMode() && changed) {
                     listener.options.lastServer = lastServerBeforeStreamerMode;
+                    changed = false;
                 }
             }
         });
