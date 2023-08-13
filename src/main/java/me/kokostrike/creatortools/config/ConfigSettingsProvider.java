@@ -2,6 +2,7 @@ package me.kokostrike.creatortools.config;
 
 import com.google.gson.Gson;
 import lombok.Getter;
+import me.kokostrike.creatortools.CreatorTools;
 import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 
@@ -26,7 +27,7 @@ public class ConfigSettingsProvider {
     public static void save() {
         try {
             Gson gson = new Gson();
-            File file = new File(FabricLoader.getInstance().getConfigDir() + "/settings.json");
+            File file = new File(FabricLoader.getInstance().getConfigDir() + "/" + CreatorTools.MOD_ID + "-settings.json");
             file.getParentFile().mkdir();
             file.createNewFile();
             Writer writer = new FileWriter(file, false);
@@ -42,7 +43,7 @@ public class ConfigSettingsProvider {
     public static void load() {
         try {
             Gson gson = new Gson();
-            File file = new File(FabricLoader.getInstance().getConfigDir() + "/settings.json");
+            File file = new File(FabricLoader.getInstance().getConfigDir() + "/" + CreatorTools.MOD_ID + "-settings.json");
             if (file.exists()) {
                 Reader reader = new FileReader(file);
                 configSettings = gson.fromJson(reader, ConfigSettings.class);
