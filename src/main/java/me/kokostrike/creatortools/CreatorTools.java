@@ -6,6 +6,7 @@ import me.kokostrike.creatortools.config.ConfigScreen;
 import me.kokostrike.creatortools.config.ConfigSettingsProvider;
 import me.kokostrike.creatortools.managers.StreamerModeManager;
 import me.kokostrike.creatortools.managers.ReminderManager;
+import me.kokostrike.creatortools.managers.YouTubeManager;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.client.gui.screen.Screen;
@@ -26,6 +27,9 @@ public class CreatorTools implements ModInitializer {
 
 	@Getter
 	private StreamerModeManager streamerModeManager;
+
+	@Getter
+	private YouTubeManager youTubeManager;
 
 	public static Screen getScreen(Screen parent) {
 		return configScreen.getScreen(parent);
@@ -51,6 +55,7 @@ public class CreatorTools implements ModInitializer {
 	private void loadManagers() {
 		streamerModeManager = new StreamerModeManager();
         reminderManager = new ReminderManager();
+		youTubeManager = new YouTubeManager();
 	}
 
 	private void loadCommands() {

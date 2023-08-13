@@ -48,17 +48,4 @@ public class CreatorToolsCommand {
                     return 0;
                 })));
     }
-
-    // helper functions
-    private void runCommand(String command) {
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player == null) return;
-        player.networkHandler.sendCommand(command);
-    }
-
-    private void sendMessage(String message) {
-        if (MinecraftClient.getInstance().player != null) MinecraftClient.getInstance().player.sendMessage(Text.of(message));
-    }
-
-
 }
