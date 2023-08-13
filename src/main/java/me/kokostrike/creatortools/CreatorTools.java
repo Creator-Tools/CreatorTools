@@ -5,9 +5,9 @@ import me.kokostrike.creatortools.commands.CreatorToolsCommand;
 import me.kokostrike.creatortools.config.ConfigScreen;
 import me.kokostrike.creatortools.config.ConfigSettingsProvider;
 import me.kokostrike.creatortools.managers.StreamerModeManager;
+import me.kokostrike.creatortools.managers.ReminderManager;
 import net.fabricmc.api.ModInitializer;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +21,12 @@ public class CreatorTools implements ModInitializer {
 	@Getter
 	private static ConfigScreen configScreen;
 
+	@Getter
+	private ReminderManager reminderManager;
+
+	@Getter
+	private StreamerModeManager streamerModeManager;
+
 	public static Screen getScreen(Screen parent) {
 		return configScreen.getScreen(parent);
 	}
@@ -31,7 +37,6 @@ public class CreatorTools implements ModInitializer {
 		loadConfig();
 		loadCommands();
 		loadManagers();
-		System.out.println(MinecraftClient.getInstance().options);
 
 		LOGGER.info("CreatorTools has been enabled!");
 	}
@@ -44,7 +49,8 @@ public class CreatorTools implements ModInitializer {
 	}
 
 	private void loadManagers() {
-		new StreamerModeManager();
+		streamerModeManager = new StreamerModeManager();
+        reminderManager = new ReminderManager();
 	}
 
 	private void loadCommands() {

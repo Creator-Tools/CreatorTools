@@ -2,6 +2,7 @@ package me.kokostrike.creatortools.config;
 
 import lombok.Getter;
 import me.kokostrike.creatortools.CreatorTools;
+import me.kokostrike.creatortools.enums.SafeTimeUnit;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -18,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 
 
 public class ConfigScreen {
-    private int minutes = 5;
     private boolean isOpen = false;
 
     private final CreatorTools mod;
@@ -54,6 +54,7 @@ public class ConfigScreen {
                 .setTitle(Text.literal("Creator Tools"));
         builder.setSavingRunnable(() -> {
             ConfigSettingsProvider.updateSettings(configSettings);
+            mod.getReminderManager().updateConfig();
         });
 
         ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
@@ -77,14 +78,14 @@ public class ConfigScreen {
                 .setSaveConsumer(s -> configSettings.setEnableReminders(s))
                 .build());
 
-        reminders.addEntry(entryBuilder.startIntField(Text.literal("Reminder Interval"), minutes)
-                .setDefaultValue(minutes)
+        reminders.addEntry(entryBuilder.startIntField(Text.literal("Reminder Interval"), configSettings.getTimeInterval())
+                .setDefaultValue(5)
                 .setSaveConsumer(s -> configSettings.setTimeInterval(s))
                 .setTooltip(Text.of("Interval between reminders."))
                 .build());
 
-        reminders.addEntry(entryBuilder.startEnumSelector(Text.literal("Time Unit"), TimeUnit.class, configSettings.getSelectedTimeUnit())
-                .setDefaultValue(TimeUnit.SECONDS)
+        reminders.addEntry(entryBuilder.startEnumSelector(Text.literal("Time Unit"), SafeTimeUnit.class, configSettings.getSelectedTimeUnit())
+                .setDefaultValue(SafeTimeUnit.SECONDS)
                 .setSaveConsumer(s -> configSettings.setSelectedTimeUnit(s))
                 .setTooltip(Text.of("Time unit for the reminder interval."))
                 .build());
