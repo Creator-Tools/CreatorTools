@@ -15,6 +15,7 @@
 	"license": "MIT",
 	"icon": "assets/creatortools/icon.png",
 	"environment": "*",
+	"accessWidener": "creatortools.accesswidener",
 	"entrypoints": {
 		"main": [
           "me.kokostrike.creatortools.CreatorTools"
