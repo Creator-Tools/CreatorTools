@@ -1,0 +1,25 @@
+accessWidener    v1    named
+accessible field net/minecraft/client/gui/screen/DirectConnectScreen addressField Lnet/minecraft/client/gui/widget/TextFieldWidget;
+accessible field net/minecraft/client/gui/screen/DirectConnectScreen serverEntry Lnet/minecraft/client/network/ServerInfo;
+accessible field net/minecraft/client/gui/screen/DirectConnectScreen callback Lit/unimi/dsi/fastutil/booleans/BooleanConsumer;
+accessible field net/minecraft/client/gui/screen/DirectConnectScreen selectServerButton Lnet/minecraft/client/gui/widget/ButtonWidget;
+accessible field net/minecraft/client/gui/screen/DirectConnectScreen parent Lnet/minecraft/client/gui/screen/Screen;
+accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen parent Lnet/minecraft/client/gui/screen/Screen;
+accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen serverList Lnet/minecraft/client/option/ServerList;
+accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen lanServers Lnet/minecraft/client/network/LanServerQueryManager$LanServerEntryList;
+accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen lanServerDetector Lnet/minecraft/client/network/LanServerQueryManager$LanServerDetector;
+accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen LOGGER Lorg/slf4j/Logger;
+accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen buttonJoin Lnet/minecraft/client/gui/widget/ButtonWidget;
+accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen selectedEntry Lnet/minecraft/client/network/ServerInfo;
+accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen buttonEdit Lnet/minecraft/client/gui/widget/ButtonWidget;
+accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen buttonDelete Lnet/minecraft/client/gui/widget/ButtonWidget;
+accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen refresh ()V
+accessible field net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen initialized Z
+accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen directConnect (Z)V
+accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen addEntry (Z)V
+accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen editEntry (Z)V
+accessible method net/minecraft/client/gui/screen/multiplayer/MultiplayerScreen removeEntry (Z)V
+accessible method net/minecraft/client/gui/screen/DirectConnectScreen onAddressFieldChanged ()V
+
+
+

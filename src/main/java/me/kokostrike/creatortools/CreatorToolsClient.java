@@ -11,4 +11,7 @@ public class CreatorToolsClient implements ClientModInitializer {
     public void onInitializeClient() {
         CreatorTools.registerKeyInputHandler(new KeyInputHandler());
     }
+
+
 }
+

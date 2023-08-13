@@ -42,7 +42,8 @@ repositories {
 }
 
 loom {
-    runs {
+	accessWidenerPath = file("src/main/resources/creatortools.accesswidener")
+	runs {
 		// This adds a new gradle task that runs the datagen API: "gradlew runDatagen"
 		datagen {
 			inherit server
