@@ -3,6 +3,7 @@ package me.kokostrike.creatortools.config;
 import lombok.Data;
 import me.kokostrike.creatortools.enums.ChatPlace;
 import me.kokostrike.creatortools.enums.SafeTimeUnit;
+import net.minecraft.client.option.KeyBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ public class ConfigSettings {
     //general settings
     private boolean streamerMode;
     private String splitCharacter;
+    private int keyValue;
 
     //YouTube settings
     private boolean youtubeEnabled;
@@ -27,13 +29,14 @@ public class ConfigSettings {
     private List<String> commandOnSuperChat;
     private List<String> commandActions;
 
-    public ConfigSettings(List<String> reminderList, SafeTimeUnit selectedTimeUnit, boolean enableReminders, int timeInterval, boolean streamerMode, String splitCharacter, boolean youtubeEnabled, String liveId, ChatPlace liveChatIn, ChatPlace superChatIn, List<String> commandOnSuperChat, List<String> commandActions) {
+    public ConfigSettings(List<String> reminderList, SafeTimeUnit selectedTimeUnit, boolean enableReminders, int timeInterval, boolean streamerMode, String splitCharacter, int keyValue, boolean youtubeEnabled, String liveId, ChatPlace liveChatIn, ChatPlace superChatIn, List<String> commandOnSuperChat, List<String> commandActions) {
         this.reminderList = reminderList;
         this.selectedTimeUnit = selectedTimeUnit;
         this.enableReminders = enableReminders;
         this.timeInterval = timeInterval;
         this.streamerMode = streamerMode;
         this.splitCharacter = splitCharacter;
+        this.keyValue = keyValue;
         this.youtubeEnabled = youtubeEnabled;
         this.liveId = liveId;
         this.liveChatIn = liveChatIn;
@@ -52,6 +55,7 @@ public class ConfigSettings {
         //general settings
         this.streamerMode = false;
         this.splitCharacter = "/";
+        this.keyValue = 75;
 
         //YouTube settings
         this.youtubeEnabled = false;

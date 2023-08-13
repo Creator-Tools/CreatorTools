@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.kokostrike.creatortools.commands.CreatorToolsCommand;
 import me.kokostrike.creatortools.config.ConfigScreen;
 import me.kokostrike.creatortools.config.ConfigSettingsProvider;
+import me.kokostrike.creatortools.event.KeyInputHandler;
 import me.kokostrike.creatortools.managers.StreamerModeManager;
 import me.kokostrike.creatortools.managers.ReminderManager;
 import me.kokostrike.creatortools.managers.YouTubeManager;
@@ -30,6 +31,9 @@ public class CreatorTools implements ModInitializer {
 
 	@Getter
 	private YouTubeManager youTubeManager;
+
+	@Getter
+	private static KeyInputHandler keyInputHandler;
 
 	public static Screen getScreen(Screen parent) {
 		return configScreen.getScreen(parent);
@@ -62,4 +66,7 @@ public class CreatorTools implements ModInitializer {
 		new CreatorToolsCommand(this);
 	}
 
+	public static void registerKeyInputHandler(KeyInputHandler handler) {
+		keyInputHandler = handler;
+	}
 }

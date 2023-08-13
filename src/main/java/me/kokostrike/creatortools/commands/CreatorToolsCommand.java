@@ -39,12 +39,12 @@ public class CreatorToolsCommand {
     private void registerClientCommand(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
         commandNode = dispatcher.register(ClientCommandManager.literal("creatortools")
                 .executes((context -> {
-                    mod.getConfigScreen().buildAndOpen();
+                    CreatorTools.getConfigScreen().buildAndOpen();
                     return 0;
                 })));
         dispatcher.register(ClientCommandManager.literal("ct").
                 executes((context -> {
-                    mod.getConfigScreen().buildAndOpen();
+                    CreatorTools.getConfigScreen().buildAndOpen();
                     return 0;
                 })));
     }

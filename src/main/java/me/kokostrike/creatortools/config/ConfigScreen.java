@@ -1,5 +1,6 @@
 package me.kokostrike.creatortools.config;
 
+import com.ibm.icu.impl.StaticUnicodeSets;
 import lombok.Getter;
 import me.kokostrike.creatortools.CreatorTools;
 import me.kokostrike.creatortools.enums.ChatPlace;
@@ -14,6 +15,7 @@ import net.minecraft.client.gui.screen.DirectConnectScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -57,6 +59,7 @@ public class ConfigScreen {
             ConfigSettingsProvider.updateSettings(configSettings);
             mod.getReminderManager().updateConfig();
             mod.getYouTubeManager().update();
+            CreatorTools.getKeyInputHandler().update();
         });
 
         ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
@@ -71,6 +74,11 @@ public class ConfigScreen {
                 .setDefaultValue("/")
                 .setSaveConsumer(s -> configSettings.setSplitCharacter(s))
                 .setTooltip(Text.of("Character used to split the title and subtitle in the reminders."))
+                .build());
+        general.addEntry(entryBuilder.fillKeybindingField(Text.of("Keybind"), CreatorTools.getKeyInputHandler().getConfigKey())
+                .setDefaultValue(CreatorTools.getKeyInputHandler().getDefaultValue().getDefaultKey())
+                .setKeySaveConsumer(key -> configSettings.setKeyValue(key.getCode()))
+                .setTooltip(Text.of("A key to open this config."))
                 .build());
 
         // Reminders
@@ -99,7 +107,7 @@ public class ConfigScreen {
                 .build());
 
         ConfigCategory youtube = builder.getOrCreateCategory(Text.literal("Youtube"));
-        youtube.addEntry(entryBuilder.startBooleanToggle(Text.literal("Youtube"), configSettings.isYoutubeEnabled())
+        youtube.addEntry(entryBuilder.startBooleanToggle(Text.literal("Enabled"), configSettings.isYoutubeEnabled())
                 .setDefaultValue(false)
                 .setSaveConsumer(s -> configSettings.setYoutubeEnabled(s))
                 .setTooltip(Text.literal("Is the YouTube feautre enabled?"))
