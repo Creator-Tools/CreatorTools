@@ -31,7 +31,12 @@ public class ReminderManager {
         executor.scheduleAtFixedRate(() -> {
             if (index == -1 || configSettings.getReminderList().size() < index+1) index = 0;
             if (configSettings.getReminderList().isEmpty()) return;
-            String[] toast = configSettings.getReminderList().get(index).split(configSettings.getSplitCharacter());
+            String toastText = configSettings.getReminderList().get(index);
+            if (toastText.isEmpty() || !toastText.contains(configSettings.getSplitCharacter())) {
+                configSettings.getReminderList().remove(index);
+                return;
+            }
+            String[] toast = toastText.split(configSettings.getSplitCharacter());
             showToast(toast[0], toast[1]);
             index++;
         },0, configSettings.getTimeInterval(), TimeUnit.valueOf(configSettings.getSelectedTimeUnit().toString()));
