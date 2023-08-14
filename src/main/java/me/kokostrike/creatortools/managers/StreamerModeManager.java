@@ -18,5 +18,6 @@ public class StreamerModeManager {
                 listener.setScreen(new MultiplayerScreenCensored(realScreen));
             }
         });
+
     }
 }

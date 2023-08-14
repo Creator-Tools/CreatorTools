@@ -16,7 +16,9 @@ public class ConfigSettings {
     private int timeInterval;
 
     //general settings
-    private boolean streamerMode;
+    private boolean censorIPAddress;
+    private boolean chatFilter;
+    private List<String> chatFilterMessages;
     private String splitCharacter;
     private int keyValue;
 
