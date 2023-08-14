@@ -12,11 +12,12 @@ public class StreamerModeManager {
         this.configSettings = ConfigSettingsProvider.getConfigSettings();
 
         ClientTickEvents.START_CLIENT_TICK.register((listener) -> {
-            if (!configSettings.isStreamerMode()) return;
+            if (!configSettings.isCensorIPAddress()) return;
 
             if (!(listener.currentScreen instanceof MultiplayerScreenCensored) && listener.currentScreen instanceof MultiplayerScreen realScreen ) {
                 listener.setScreen(new MultiplayerScreenCensored(realScreen));
             }
         });
+
     }
 }

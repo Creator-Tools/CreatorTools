@@ -1,7 +1,5 @@
 package me.kokostrike.creatortools.config;
 
-import com.ibm.icu.impl.StaticUnicodeSets;
-import lombok.Getter;
 import me.kokostrike.creatortools.CreatorTools;
 import me.kokostrike.creatortools.enums.ChatPlace;
 import me.kokostrike.creatortools.enums.SafeTimeUnit;
@@ -11,15 +9,10 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.DirectConnectScreen;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 
 public class ConfigScreen {
@@ -65,11 +58,24 @@ public class ConfigScreen {
         ConfigCategory general = builder.getOrCreateCategory(Text.literal("General"));
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
-        // General
-        general.addEntry(entryBuilder.startBooleanToggle(Text.literal("Streamer Mode"), configSettings.isStreamerMode())
+        //    General
+        // Streamer Mode
+        SubCategoryBuilder streamerModSub = entryBuilder.startSubCategory(Text.literal("Streamer Mode"));
+        streamerModSub.add(entryBuilder.startBooleanToggle(Text.literal("Censor IP Address"), configSettings.isCensorIPAddress())
                 .setDefaultValue(false)
-                .setSaveConsumer(s -> configSettings.setStreamerMode(s))
+                .setSaveConsumer(s -> configSettings.setCensorIPAddress(s))
                 .build());
+        streamerModSub.add(entryBuilder.startBooleanToggle(Text.literal("Chat Filter"), configSettings.isChatFilter())
+                .setDefaultValue(false)
+                .setSaveConsumer(s -> configSettings.setChatFilter(s))
+                .build());
+        streamerModSub.add(entryBuilder.startStrList(Text.literal("Chat Filter Words"), configSettings.getChatFilterMessages())
+                .setDefaultValue(new ArrayList<>())
+                .setSaveConsumer(s -> configSettings.setChatFilterMessages(s))
+                .build());
+
+        general.addEntry(streamerModSub.build());
+
         general.addEntry(entryBuilder.startStrField(Text.literal("Split Character"), configSettings.getSplitCharacter())
                 .setDefaultValue("/")
                 .setSaveConsumer(s -> configSettings.setSplitCharacter(s))

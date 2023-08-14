@@ -3,11 +3,10 @@ package me.kokostrike.creatortools.config;
 import lombok.Data;
 import me.kokostrike.creatortools.enums.ChatPlace;
 import me.kokostrike.creatortools.enums.SafeTimeUnit;
-import net.minecraft.client.option.KeyBinding;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 @Data
 public class ConfigSettings {
     //reminder settings
@@ -17,7 +16,9 @@ public class ConfigSettings {
     private int timeInterval;
 
     //general settings
-    private boolean streamerMode;
+    private boolean censorIPAddress;
+    private boolean chatFilter;
+    private List<String> chatFilterMessages;
     private String splitCharacter;
     private int keyValue;
 
@@ -29,12 +30,14 @@ public class ConfigSettings {
     private List<String> commandOnSuperChat;
     private List<String> commandActions;
 
-    public ConfigSettings(List<String> reminderList, SafeTimeUnit selectedTimeUnit, boolean enableReminders, int timeInterval, boolean streamerMode, String splitCharacter, int keyValue, boolean youtubeEnabled, String liveId, ChatPlace liveChatIn, ChatPlace superChatIn, List<String> commandOnSuperChat, List<String> commandActions) {
+    public ConfigSettings(List<String> reminderList, SafeTimeUnit selectedTimeUnit, boolean enableReminders, int timeInterval, boolean censorIPAddress, boolean chatFilter, List<String> chatFilterMessages, String splitCharacter, int keyValue, boolean youtubeEnabled, String liveId, ChatPlace liveChatIn, ChatPlace superChatIn, List<String> commandOnSuperChat, List<String> commandActions) {
         this.reminderList = reminderList;
         this.selectedTimeUnit = selectedTimeUnit;
         this.enableReminders = enableReminders;
         this.timeInterval = timeInterval;
-        this.streamerMode = streamerMode;
+        this.censorIPAddress = censorIPAddress;
+        this.chatFilter = chatFilter;
+        this.chatFilterMessages = chatFilterMessages;
         this.splitCharacter = splitCharacter;
         this.keyValue = keyValue;
         this.youtubeEnabled = youtubeEnabled;
@@ -53,7 +56,9 @@ public class ConfigSettings {
         this.timeInterval = 5;
 
         //general settings
-        this.streamerMode = false;
+        this.censorIPAddress = false;
+        this.chatFilter = false;
+        this.chatFilterMessages = new ArrayList<>();
         this.splitCharacter = "/";
         this.keyValue = 75;
 
