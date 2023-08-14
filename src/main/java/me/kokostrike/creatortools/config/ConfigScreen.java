@@ -124,15 +124,20 @@ public class ConfigScreen {
                 .setSaveConsumer(s -> {
                     if (s.contains("http") || s.contains("youtube.com")) {
                         String id = s;
-                        if (s.contains("live/")) {
-                            String[] parts = s.split("live/");
-                            id = parts[1].split("//?")[0];
-                        }
-                        if (s.contains("?v=")) {
-                            String[] parts = s.split("//?v=");
-                            id = parts[1].split("&")[0];
+                        try {
+                            if (s.contains("live/")) {
+                                String[] parts = s.split("live/");
+                                id = parts[1].split("\\?")[0];
+                            }
+                            if (s.contains("?v=")) {
+                                String[] parts = s.split("\\?v=");
+                                id = parts[1].split("&")[0];
+                            }
+                        }catch (IndexOutOfBoundsException e) {
+                            id = s;
                         }
                         configSettings.setLiveId(s);
+                        return;
                     }
                     configSettings.setLiveId(s);
                 })

@@ -67,16 +67,17 @@ public class YouTubeManager {
                             if (configSettings.getLiveChatIn().equals(ChatPlace.NONE)) continue;
 
                             if (configSettings.getLiveChatIn().equals(ChatPlace.CHAT))
-                                sendMessage(String.format("§c§lLIVE §r-> %s: %s", item.getAuthorName(), item.getMessage()));
+                                sendMessage(String.format("§c§lLIVE §r-> §a%s§r: %s", item.getAuthorName(), item.getMessage()));
                             else showToast(item.getAuthorName(), item.getMessage());
                             continue;
                         }
                         if (!configSettings.getSuperChatIn().equals(ChatPlace.NONE)) {
+                            System.out.println(String.format("Author: %s, Message: %s, Amount: %s", item.getAuthorName(), item.getMessage(), item.getPurchaseAmount()));
                             if (configSettings.getSuperChatIn().equals(ChatPlace.REMINDER)) showToast(String.format("%s donated %s", item.getAuthorName(), item.getPurchaseAmount()), String.format("\"%s\"", item.getMessage()));
-                            else sendMessage(String.format("§6§lSUPER CHAT %s §r-> %s: %s", item.getPurchaseAmount(), item.getAuthorName(), item.getMessage()));
+                            else sendMessage(String.format("§6§lSUPER CHAT %s §r-> §a%s§r: %s", item.getPurchaseAmount(), item.getAuthorName(), item.getMessage()));
                         }
                         if (!configSettings.getCommandOnSuperChat().isEmpty()) {
-                            if (superCommands.containsKey(item.getPurchaseAmount()))
+                            if (superCommands.containsKey(getIntAmount(item.getPurchaseAmount())))
                                 runCommand(superCommands.get(item.getPurchaseAmount()));
                         }
                     }
@@ -93,6 +94,14 @@ public class YouTubeManager {
 
     private void stop() {
         if (executor != null) executor.shutdown();
+    }
+
+    private String getIntAmount(String amount) {
+        if (amount.contains("₪"))
+            return amount.split("₪")[0];
+        if (amount.contains("$"))
+            return amount.split("\\$")[0];
+        return amount;
     }
 
     private void restart() {
