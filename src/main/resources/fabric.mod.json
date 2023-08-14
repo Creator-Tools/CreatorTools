@@ -9,10 +9,10 @@
 		"StrikeDev"
 	],
 	"contact": {
-		"homepage": "https://discord.gg/EDNMfSzJVH",
+		"homepage": "https://discord.gg/uQrQ9JPhsh",
 		"sources": "https://github.com/KokoDevs/CreatorTools"
 	},
-	"license": "MIT",
+	"license": "GNU General Public License v3.0",
 	"icon": "assets/creatortools/icon.png",
 	"environment": "*",
 	"accessWidener": "creatortools.accesswidener",
@@ -46,7 +46,7 @@
 	"custom": {
 		"modmenu": {
 			"links": {
-				"modmenu.discord": "https://discord.gg/EDNMfSzJVH"
+				"modmenu.discord": "https://discord.gg/uQrQ9JPhsh"
 			}
 		}
 	}

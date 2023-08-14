@@ -116,7 +116,7 @@ public class ConfigScreen {
         youtube.addEntry(entryBuilder.startBooleanToggle(Text.literal("Enabled"), configSettings.isYoutubeEnabled())
                 .setDefaultValue(false)
                 .setSaveConsumer(s -> configSettings.setYoutubeEnabled(s))
-                .setTooltip(Text.literal("Is the YouTube feautre enabled?"))
+                .setTooltip(Text.literal("Is the YouTube feature enabled?"))
                 .build());
 
         youtube.addEntry(entryBuilder.startStrField(Text.literal("Live ID"), configSettings.getLiveId())
@@ -146,18 +146,18 @@ public class ConfigScreen {
         youtube.addEntry(entryBuilder.startEnumSelector(Text.literal("Live Chat in"), ChatPlace.class, configSettings.getLiveChatIn())
                 .setDefaultValue(ChatPlace.NONE)
                 .setSaveConsumer(s -> configSettings.setLiveChatIn(s))
-                .setTooltip(Text.literal("Showing the live chat in the minecraft chat."))
+                .setTooltip(Text.literal("Showing the live chat in the chosen place."))
                 .build());
         SubCategoryBuilder superChatEvents = entryBuilder.startSubCategory(Text.literal("Super Chat Events"));
-        superChatEvents.add(entryBuilder.startEnumSelector(Text.literal("Reminder on super chat"), ChatPlace.class, configSettings.getSuperChatIn())
+        superChatEvents.add(entryBuilder.startEnumSelector(Text.literal("Super Chat in"), ChatPlace.class, configSettings.getSuperChatIn())
                 .setDefaultValue(ChatPlace.REMINDER)
                 .setSaveConsumer(s -> configSettings.setSuperChatIn(s))
-                .setTooltip(Text.literal("Showing a reminder when a super chat occurs"))
+                .setTooltip(Text.literal("Showing the super chat in the chosen place."))
                 .build());
         superChatEvents.add(entryBuilder.startStrList(Text.literal("Commands on Super Chat"), configSettings.getCommandOnSuperChat())
                 .setDefaultValue(new ArrayList<>())
                 .setSaveConsumer(s -> configSettings.setCommandOnSuperChat(s))
-                .setTooltip(Text.of("Run a command when a super chat occurs.\nFormat: 'amount(example: 5)'" + configSettings.getSplitCharacter() + "'Command(example:/gamemode creative)'"))
+                .setTooltip(Text.of("Run a command when a super chat occurs.\nFormat: 'amount(example: 5)'" + configSettings.getSplitCharacter() + "'Command(example:gamemode creative)'"))
                 .build());
         youtube.addEntry(superChatEvents.build());
 

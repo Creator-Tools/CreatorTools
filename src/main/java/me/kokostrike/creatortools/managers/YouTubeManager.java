@@ -59,7 +59,6 @@ public class YouTubeManager {
                     chat.update();
                     for (ChatItem item : chat.getChatItems()) {
                         if (item.getType().equals(ChatItemType.MESSAGE)) {
-                            System.out.println(actionCommands);
                             if (actionCommands.containsKey(item.getMessage())) {
                                 runCommand(actionCommands.get(item.getMessage()));
                                 continue;
@@ -72,7 +71,6 @@ public class YouTubeManager {
                             continue;
                         }
                         if (!configSettings.getSuperChatIn().equals(ChatPlace.NONE)) {
-                            System.out.println(String.format("Author: %s, Message: %s, Amount: %s", item.getAuthorName(), item.getMessage(), item.getPurchaseAmount()));
                             if (configSettings.getSuperChatIn().equals(ChatPlace.REMINDER)) showToast(String.format("%s donated %s", item.getAuthorName(), item.getPurchaseAmount()), String.format("\"%s\"", item.getMessage()));
                             else sendMessage(String.format("§6§lSUPER CHAT %s §r-> §a%s§r: %s", item.getPurchaseAmount(), item.getAuthorName(), item.getMessage()));
                         }
