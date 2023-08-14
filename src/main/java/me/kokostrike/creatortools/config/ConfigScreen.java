@@ -115,7 +115,21 @@ public class ConfigScreen {
 
         youtube.addEntry(entryBuilder.startStrField(Text.literal("Live ID"), configSettings.getLiveId())
                 .setDefaultValue("")
-                .setSaveConsumer(s -> configSettings.setLiveId(s))
+                .setSaveConsumer(s -> {
+                    if (s.contains("http") || s.contains("youtube.com")) {
+                        String id = s;
+                        if (s.contains("live/")) {
+                            String[] parts = s.split("live/");
+                            id = parts[1].split("//?")[0];
+                        }
+                        if (s.contains("?v=")) {
+                            String[] parts = s.split("//?v=");
+                            id = parts[1].split("&")[0];
+                        }
+                        configSettings.setLiveId(s);
+                    }
+                    configSettings.setLiveId(s);
+                })
                 .setTooltip(Text.literal("The live ID"))
                 .build());
         youtube.addEntry(entryBuilder.startEnumSelector(Text.literal("Live Chat in"), ChatPlace.class, configSettings.getLiveChatIn())
