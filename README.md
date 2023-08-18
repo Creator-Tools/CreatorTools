@@ -36,10 +36,10 @@
     A Mod for Content Creators. Addes a lot of Content Creator's utilities! <br>
     Authors: KokoDevs, Strike24
     <br />
-    <a href="https://github.com/KokoDevs/CreatorTools"><strong>Explore the docs »</strong></a>
+    <a href="https://creatortools.gitbook.io/english-docs-ct/"><strong>Explore the docs »</strong></a>
+    <a href="https://modrinth.com/mod/creator-tools"><strong>View on Modrinth »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/KokoDevs/CreatorTools">View Demo</a>
     ·
     <a href="https://github.com/KokoDevs/CreatorTools/issues">Report Bug</a>
     ·
