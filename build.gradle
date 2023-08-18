@@ -14,6 +14,7 @@ shadowJar {
 	destinationDirectory = file("$rootDir/output")
 	dependencies {
 		include(dependency("com.github.kusaanko:YouTubeLiveChat:1.5"))
+		include(dependency("com.github.twitch4j:twitch4j:1.16.0"))
 	}
 }
 
@@ -70,6 +71,7 @@ sourceSets {
 dependencies {
 	implementation 'com.google.code.gson:gson:2.8.7'
 	implementation "com.github.kusaanko:YouTubeLiveChat:1.5"
+	implementation "com.github.twitch4j:twitch4j:1.16.0"
 
 	compileOnly 'org.projectlombok:lombok:1.18.28'
 	annotationProcessor 'org.projectlombok:lombok:1.18.28'

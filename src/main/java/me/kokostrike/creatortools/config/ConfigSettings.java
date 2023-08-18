@@ -30,7 +30,13 @@ public class ConfigSettings {
     private List<String> commandOnSuperChat;
     private List<String> commandActions;
 
-    public ConfigSettings(List<String> reminderList, SafeTimeUnit selectedTimeUnit, boolean enableReminders, int timeInterval, boolean censorIPAddress, boolean chatFilter, List<String> chatFilterMessages, String splitCharacter, int keyValue, boolean youtubeEnabled, String liveId, ChatPlace liveChatIn, ChatPlace superChatIn, List<String> commandOnSuperChat, List<String> commandActions) {
+    //Twitch settings
+    private boolean twitchEnabled;
+    private String channelName;
+    private ChatPlace twitchLiveChatIn;
+    private List<String> twitchCommandActions;
+
+    public ConfigSettings(List<String> reminderList, SafeTimeUnit selectedTimeUnit, boolean enableReminders, int timeInterval, boolean censorIPAddress, boolean chatFilter, List<String> chatFilterMessages, String splitCharacter, int keyValue, boolean youtubeEnabled, String liveId, ChatPlace liveChatIn, ChatPlace superChatIn, List<String> commandOnSuperChat, List<String> commandActions, boolean twitchEnabled, String channelName, ChatPlace twitchLiveChatIn, List<String> twitchCommandActions) {
         this.reminderList = reminderList;
         this.selectedTimeUnit = selectedTimeUnit;
         this.enableReminders = enableReminders;
@@ -46,6 +52,10 @@ public class ConfigSettings {
         this.superChatIn = superChatIn;
         this.commandOnSuperChat = commandOnSuperChat;
         this.commandActions = commandActions;
+        this.twitchEnabled = twitchEnabled;
+        this.channelName = channelName;
+        this.twitchLiveChatIn = twitchLiveChatIn;
+        this.twitchCommandActions = twitchCommandActions;
     }
 
     public ConfigSettings() {
@@ -69,5 +79,11 @@ public class ConfigSettings {
         this.superChatIn = ChatPlace.REMINDER;
         this.commandOnSuperChat = new ArrayList<>();
         this.commandActions = new ArrayList<>();
+
+        //twitch
+        this.twitchEnabled = false;
+        this.channelName = "";
+        this.twitchLiveChatIn = ChatPlace.NONE;
+        this.twitchCommandActions = new ArrayList<>();
     }
 }

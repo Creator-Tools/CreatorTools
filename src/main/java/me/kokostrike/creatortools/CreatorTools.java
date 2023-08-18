@@ -7,6 +7,7 @@ import me.kokostrike.creatortools.config.ConfigSettingsProvider;
 import me.kokostrike.creatortools.event.KeyInputHandler;
 import me.kokostrike.creatortools.managers.StreamerModeManager;
 import me.kokostrike.creatortools.managers.ReminderManager;
+import me.kokostrike.creatortools.managers.TwitchManager;
 import me.kokostrike.creatortools.managers.YouTubeManager;
 import net.fabricmc.api.ModInitializer;
 
@@ -31,6 +32,9 @@ public class CreatorTools implements ModInitializer {
 
 	@Getter
 	private YouTubeManager youTubeManager;
+
+	@Getter
+	private TwitchManager twitchManager;
 
 	@Getter
 	private static KeyInputHandler keyInputHandler;
@@ -60,6 +64,7 @@ public class CreatorTools implements ModInitializer {
 		streamerModeManager = new StreamerModeManager();
         reminderManager = new ReminderManager();
 		youTubeManager = new YouTubeManager();
+		twitchManager = new TwitchManager();
 	}
 
 	private void loadCommands() {
