@@ -13,9 +13,7 @@ import net.minecraft.client.toast.SystemToast;
 import net.minecraft.text.Text;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -38,13 +36,19 @@ public class YouTubeManager {
 
     private Map<String, String> listToMap(List<String> list) {
         Map<String, String> map = new HashMap<>();
+        List<String> toRemove = new ArrayList<>();
         for (String s : list) {
             if (s.isEmpty() || !s.contains(configSettings.getSplitCharacter())) {
-                list.remove(s);
+                toRemove.add(s);
                 continue;
             }
             String[] parts = s.split(configSettings.getSplitCharacter());
             map.put(parts[0], parts[1]);
+        }
+        if (!toRemove.isEmpty()) {
+            list.removeAll(toRemove);
+            configSettings.setCommandActions(list);
+            ConfigSettingsProvider.updateSettings(configSettings);
         }
         return map;
     }
