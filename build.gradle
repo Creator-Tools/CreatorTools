@@ -14,7 +14,6 @@ shadowJar {
 	destinationDirectory = file("$rootDir/output")
 	dependencies {
 		include(dependency("com.github.kusaanko:YouTubeLiveChat:1.5"))
-		include(dependency("com.github.twitch4j:twitch4j:1.16.0"))
 	}
 }
 

@@ -3,7 +3,9 @@ package me.kokostrike.creatortools.managers;
 import com.github.philippheuer.events4j.api.domain.IEventSubscription;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
+import com.github.twitch4j.auth.providers.TwitchIdentityProvider;
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
+import com.github.twitch4j.eventsub.socket.IEventSubSocket;
 import me.kokostrike.creatortools.config.ConfigSettings;
 import me.kokostrike.creatortools.config.ConfigSettingsProvider;
 import me.kokostrike.creatortools.enums.ChatPlace;
@@ -12,13 +14,10 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.text.Text;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class TwitchManager {
     private ScheduledExecutorService executor;
@@ -37,9 +36,9 @@ public class TwitchManager {
                 .build();
         if (!configSettings.getChannelName().isEmpty())
             client.getChat().joinChannel(configSettings.getChannelName());
-
         //chat messages
-        this.chatEvent = client.getEventManager().onEvent(ChannelMessageEvent.class, this::twitchChatEvent);
+        if (configSettings.isYoutubeEnabled())
+            this.chatEvent = client.getEventManager().onEvent(ChannelMessageEvent.class, this::twitchChatEvent);
     }
 
     private void twitchChatEvent(ChannelMessageEvent event) {
@@ -86,8 +85,9 @@ public class TwitchManager {
         actionCommands = listToMap(configSettings.getTwitchCommandActions());
         client.getChat().getChannels().forEach(s -> client.getChat().leaveChannel(s));
         client.getChat().joinChannel(configSettings.getChannelName());
-        chatEvent.dispose();
-        chatEvent = client.getEventManager().onEvent(ChannelMessageEvent.class, this::twitchChatEvent);
+        if (chatEvent != null) chatEvent.dispose();
+        if (configSettings.isTwitchEnabled())
+            chatEvent = client.getEventManager().onEvent(ChannelMessageEvent.class, this::twitchChatEvent);
     }
 
     private void runCommand(String command) {
