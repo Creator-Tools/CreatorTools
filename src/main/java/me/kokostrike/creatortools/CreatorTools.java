@@ -11,6 +11,7 @@ import me.kokostrike.creatortools.managers.TwitchManager;
 import me.kokostrike.creatortools.managers.YouTubeManager;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +65,7 @@ public class CreatorTools implements ModInitializer {
 		streamerModeManager = new StreamerModeManager();
         reminderManager = new ReminderManager();
 		youTubeManager = new YouTubeManager();
-		twitchManager = new TwitchManager();
+		if (FabricLoader.getInstance().isModLoaded("twitch4j")) twitchManager = new TwitchManager();
 	}
 
 	private void loadCommands() {

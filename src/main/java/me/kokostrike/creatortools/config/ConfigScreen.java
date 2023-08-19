@@ -167,30 +167,31 @@ public class ConfigScreen {
                 .setSaveConsumer(s -> configSettings.setCommandActions(s))
                 .setTooltip(Text.of("Run a command when a action is sent.\nFormat: 'action(example: !creeper)'" + configSettings.getSplitCharacter() + "'Command(example:summon ~ ~ ~ creeper)'"))
                 .build());
+        if (mod.getTwitchManager() != null) {
+            //Twitch
+            ConfigCategory twitch = builder.getOrCreateCategory(Text.literal("Twitch"));
+            twitch.addEntry(entryBuilder.startBooleanToggle(Text.literal("Enabled"), configSettings.isTwitchEnabled())
+                    .setDefaultValue(false)
+                    .setSaveConsumer(s -> configSettings.setTwitchEnabled(s))
+                    .setTooltip(Text.literal("Is the Twitch feature enabled?"))
+                    .build());
 
-        //Twitch
-        ConfigCategory twitch = builder.getOrCreateCategory(Text.literal("Twitch"));
-        twitch.addEntry(entryBuilder.startBooleanToggle(Text.literal("Enabled"), configSettings.isTwitchEnabled())
-                .setDefaultValue(false)
-                .setSaveConsumer(s -> configSettings.setTwitchEnabled(s))
-                .setTooltip(Text.literal("Is the Twitch feature enabled?"))
-                .build());
-
-        twitch.addEntry(entryBuilder.startStrField(Text.literal("Channel Name"), configSettings.getChannelName())
-                .setDefaultValue("")
-                .setSaveConsumer(s -> configSettings.setChannelName(s))
-                .setTooltip(Text.literal("The Channel Name"))
-                .build());
-        twitch.addEntry(entryBuilder.startEnumSelector(Text.literal("Live Chat in"), ChatPlace.class, configSettings.getTwitchLiveChatIn())
-                .setDefaultValue(ChatPlace.NONE)
-                .setSaveConsumer(s -> configSettings.setTwitchLiveChatIn(s))
-                .setTooltip(Text.literal("Showing the live chat in the chosen place."))
-                .build());
-        twitch.addEntry(entryBuilder.startStrList(Text.literal("Command Actions"), configSettings.getTwitchCommandActions())
-                .setDefaultValue(new ArrayList<>())
-                .setSaveConsumer(s -> configSettings.setTwitchCommandActions(s))
-                .setTooltip(Text.of("Run a command when a action is sent.\nFormat: 'action(example: !creeper)'" + configSettings.getSplitCharacter() + "'Command(example:summon ~ ~ ~ creeper)'"))
-                .build());
+            twitch.addEntry(entryBuilder.startStrField(Text.literal("Channel Name"), configSettings.getChannelName())
+                    .setDefaultValue("")
+                    .setSaveConsumer(s -> configSettings.setChannelName(s))
+                    .setTooltip(Text.literal("The Channel Name"))
+                    .build());
+            twitch.addEntry(entryBuilder.startEnumSelector(Text.literal("Live Chat in"), ChatPlace.class, configSettings.getTwitchLiveChatIn())
+                    .setDefaultValue(ChatPlace.NONE)
+                    .setSaveConsumer(s -> configSettings.setTwitchLiveChatIn(s))
+                    .setTooltip(Text.literal("Showing the live chat in the chosen place."))
+                    .build());
+            twitch.addEntry(entryBuilder.startStrList(Text.literal("Command Actions"), configSettings.getTwitchCommandActions())
+                    .setDefaultValue(new ArrayList<>())
+                    .setSaveConsumer(s -> configSettings.setTwitchCommandActions(s))
+                    .setTooltip(Text.of("Run a command when a action is sent.\nFormat: 'action(example: !creeper)'" + configSettings.getSplitCharacter() + "'Command(example:summon ~ ~ ~ creeper)'"))
+                    .build());
+        }
 
         screen = builder.build();
 
