@@ -34,6 +34,7 @@ public class ReminderManager {
             String toastText = configSettings.getReminderList().get(index);
             if (toastText.isEmpty() || !toastText.contains(configSettings.getSplitCharacter())) {
                 configSettings.getReminderList().remove(index);
+                ConfigSettingsProvider.updateSettings(configSettings);
                 return;
             }
             String[] toast = toastText.split(configSettings.getSplitCharacter());
