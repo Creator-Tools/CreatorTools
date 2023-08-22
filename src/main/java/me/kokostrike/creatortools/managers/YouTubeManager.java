@@ -4,15 +4,21 @@ import com.github.kusaanko.youtubelivechat.ChatItem;
 import com.github.kusaanko.youtubelivechat.ChatItemType;
 import com.github.kusaanko.youtubelivechat.IdType;
 import com.github.kusaanko.youtubelivechat.YouTubeLiveChat;
+import io.socket.client.IO;
+import io.socket.client.Socket;
 import me.kokostrike.creatortools.config.ConfigSettings;
 import me.kokostrike.creatortools.config.ConfigSettingsProvider;
 import me.kokostrike.creatortools.enums.ChatPlace;
+import me.kokostrike.creatortools.models.ActionCommand;
+import me.kokostrike.creatortools.models.StreamLabsDecoder;
+import me.kokostrike.creatortools.models.StreamElementsDecoder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.text.Text;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -21,13 +27,16 @@ import java.util.concurrent.TimeUnit;
 public class YouTubeManager {
     private ScheduledExecutorService executor;
     private ConfigSettings configSettings;
-    private Map<String, String> actionCommands;
-    private Map<String, String> superCommands;
+    private Map<String, ActionCommand> actionCommands;
+    private Map<String, String> donationCommands;
+
+    private Socket streamLabsSocket;
+    private Socket streamElementsSocket;
 
     public YouTubeManager() {
         this.configSettings = ConfigSettingsProvider.getConfigSettings();
-        this.actionCommands = listToMap(configSettings.getCommandActions());
-        this.superCommands = listToMap(configSettings.getCommandOnSuperChat());
+        this.actionCommands = listToActionCommands(configSettings.getCommandActions());
+        this.donationCommands = listToMap(configSettings.getCommandsOnDonation());
 
         if (configSettings.isYoutubeEnabled()) {
             start();
@@ -53,6 +62,51 @@ public class YouTubeManager {
         return map;
     }
 
+    private Map<String, ActionCommand> listToActionCommands(List<String> list) {
+        Map<String, ActionCommand> map = new HashMap<>();
+        List<String> toRemove = new ArrayList<>();
+        for (String s : list) {
+            if (s.isEmpty() || !s.contains(configSettings.getSplitCharacter())) {
+                toRemove.add(s);
+                continue;
+            }
+            ActionCommand actionCommand = new ActionCommand(configSettings.getSplitCharacter(), s);
+            map.put(actionCommand.getCommandToInput(), actionCommand);
+        }
+        if (!toRemove.isEmpty()) {
+            list.removeAll(toRemove);
+            configSettings.setCommandActions(list);
+            ConfigSettingsProvider.updateSettings(configSettings);
+        }
+        return map;
+    }
+
+    private void streamLabsDonationEvent(Object... data) {
+        if (data[0].toString().contains("\"type\":\"donation\"")) {
+            StreamLabsDecoder donationData = new StreamLabsDecoder(data[0]);
+            donationEvent(donationData.getFrom(), donationData.getMessage(), donationData.getFormatted_amount());
+        }
+    }
+
+    private void streamElementsDonationEvent(Object... data) {
+        if (data[0].toString().contains("\"type\":\"tip\"")) {
+            StreamElementsDecoder donationData = new StreamElementsDecoder(data[0]);
+            donationEvent(donationData.getUsername(), donationData.getMessage(), donationData.getAmount() + "$");
+        }
+    }
+
+    private void donationEvent(String author, String message, String amount) {
+        if (!configSettings.getDonationsChatIn().equals(ChatPlace.NONE)) {
+            if (configSettings.getDonationsChatIn().equals(ChatPlace.REMINDER)) showToast(String.format("%s donated %s", author, amount), String.format("\"%s\"", message));
+            else sendMessage(String.format("§6§lDONATION %s §r-> §a%s§r: %s", amount, author, message));
+        }
+        if (!configSettings.getCommandsOnDonation().isEmpty()) {
+            System.out.println(getIntAmount(amount));
+            if (donationCommands.containsKey(getIntAmount(amount)))
+                runCommand(donationCommands.get(getIntAmount(amount)));
+        }
+    }
+
     private void start() {
         executor = Executors.newScheduledThreadPool(1);
         try {
@@ -63,8 +117,8 @@ public class YouTubeManager {
                     chat.update();
                     for (ChatItem item : chat.getChatItems()) {
                         if (item.getType().equals(ChatItemType.MESSAGE)) {
-                            if (actionCommands.containsKey(item.getMessage())) {
-                                runCommand(actionCommands.get(item.getMessage()));
+                            if (actionCommands.containsKey(item.getMessage().split(" ")[0])) {
+                                actionCommands.get(item.getMessage().split(" ")[0]).run(item.getMessage());
                                 continue;
                             }
                             if (configSettings.getLiveChatIn().equals(ChatPlace.NONE)) continue;
@@ -74,14 +128,7 @@ public class YouTubeManager {
                             else showToast(item.getAuthorName(), item.getMessage());
                             continue;
                         }
-                        if (!configSettings.getSuperChatIn().equals(ChatPlace.NONE)) {
-                            if (configSettings.getSuperChatIn().equals(ChatPlace.REMINDER)) showToast(String.format("%s donated %s", item.getAuthorName(), item.getPurchaseAmount()), String.format("\"%s\"", item.getMessage()));
-                            else sendMessage(String.format("§6§lSUPER CHAT %s §r-> §a%s§r: %s", item.getPurchaseAmount(), item.getAuthorName(), item.getMessage()));
-                        }
-                        if (!configSettings.getCommandOnSuperChat().isEmpty()) {
-                            if (superCommands.containsKey(getIntAmount(item.getPurchaseAmount())))
-                                runCommand(superCommands.get(item.getPurchaseAmount()));
-                        }
+                        donationEvent(item.getAuthorName(), item.getMessage(), item.getPurchaseAmount());
                     }
                 } catch (IOException e) {
                     showToast("Error!", "Something went wrong!");
@@ -92,18 +139,53 @@ public class YouTubeManager {
             showToast("Error!", "Invalid Live ID");
         }
 
+        try {
+            if (configSettings.isStreamLabs() && !configSettings.getStreamLabsToken().isEmpty()) {
+                streamLabsSocket = IO.socket("https://sockets.streamlabs.com?token=" + configSettings.getStreamLabsToken());
+
+                streamLabsSocket.connect();
+
+                streamLabsSocket.on("event", this::streamLabsDonationEvent);
+            }
+        } catch (URISyntaxException e) {
+            showToast("StreamLabs error!", "Socket key is invalid!");
+        }
+
+        try {
+            if (configSettings.isStreamElements() && !configSettings.getStreamElementsToken().isEmpty()) {
+                streamElementsSocket = IO.socket("https://realtime.streamelements.com", IO.Options.builder().setTransports(new String[]{"websocket"}).build());
+
+                streamElementsSocket.connect();
+
+                streamElementsSocket.on("connect", (data) -> {
+                    System.out.println("Connecting");
+                    streamElementsSocket.emit("authenticate", Map.of(
+                            "method", "jwt",
+                            "token", configSettings.getStreamElementsToken()
+                    ));
+                });
+
+                streamElementsSocket.on("authenticated", (data) -> System.out.println(Arrays.toString(data)));
+                streamElementsSocket.on("unauthorized", (data) -> System.out.println(Arrays.toString(data)));
+
+
+
+                streamElementsSocket.on("event", this::streamElementsDonationEvent);
+                streamElementsSocket.on("event:test", this::streamElementsDonationEvent);
+            }
+        } catch (URISyntaxException e) {
+            showToast("StreamLabs error!", "Socket key is invalid!");
+        }
     }
 
     private void stop() {
         if (executor != null) executor.shutdown();
+        if (streamLabsSocket != null) streamLabsSocket.close();
+        if (streamElementsSocket != null) streamElementsSocket.close();
     }
 
     private String getIntAmount(String amount) {
-        if (amount.contains("₪"))
-            return amount.split("₪")[0];
-        if (amount.contains("$"))
-            return amount.split("\\$")[0];
-        return amount;
+        return String.valueOf((int) Double.parseDouble(amount.replace("₪", "").replace("$", "")));
     }
 
     private void restart() {
@@ -113,8 +195,8 @@ public class YouTubeManager {
 
     public void update() {
         configSettings = ConfigSettingsProvider.getConfigSettings();
-        actionCommands = listToMap(configSettings.getCommandActions());
-        superCommands = listToMap(configSettings.getCommandOnSuperChat());
+        actionCommands = listToActionCommands(configSettings.getCommandActions());
+        donationCommands = listToMap(configSettings.getCommandsOnDonation());
         restart();
     }
 
