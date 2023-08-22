@@ -72,6 +72,7 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.8.7'
 //	compileOnly "com.github.kusaanko:YouTubeLiveChat:1.5"
 //	implementation "com.github.twitch4j:twitch4j:1.16.0"
+	implementation "io.socket:socket.io-client:2.1.0"
 
 	compileOnly 'org.projectlombok:lombok:1.18.28'
 	annotationProcessor 'org.projectlombok:lombok:1.18.28'
@@ -98,14 +99,14 @@ dependencies {
 	include modApi("com.github.kusaanko:YouTubeLiveChat:1.5")
 
 	modCompileOnly "com.github.twitch4j:twitch4j-fabric:1.16.0+1.2.0"
-	
+
 	//	kotlin.1.8.20"
 	//	include "org.hdrhistogram:HdrHistogram:2.1.9"
 
-	// Uncomment the following line to enable the deprecated Fabric API modules. 
+	// Uncomment the following line to enable the deprecated Fabric API modules.
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
-//	 modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
+	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
 }
 remapJar.dependsOn shadowJar
 remapJar {

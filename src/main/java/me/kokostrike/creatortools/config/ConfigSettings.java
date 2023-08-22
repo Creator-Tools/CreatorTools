@@ -26,9 +26,15 @@ public class ConfigSettings {
     private boolean youtubeEnabled;
     private String liveId;
     private ChatPlace liveChatIn;
-    private ChatPlace superChatIn;
-    private List<String> commandOnSuperChat;
+    private ChatPlace donationsChatIn;
+    private List<String> commandsOnDonation;
     private List<String> commandActions;
+    //External Platforms
+    private boolean streamLabs;
+    private boolean streamElements;
+    //API KEYS
+    private String streamLabsToken;
+    private String streamElementsToken;
 
     //Twitch settings
     private boolean twitchEnabled;
@@ -36,7 +42,7 @@ public class ConfigSettings {
     private ChatPlace twitchLiveChatIn;
     private List<String> twitchCommandActions;
 
-    public ConfigSettings(List<String> reminderList, SafeTimeUnit selectedTimeUnit, boolean enableReminders, int timeInterval, boolean censorIPAddress, boolean chatFilter, List<String> chatFilterMessages, String splitCharacter, int keyValue, boolean youtubeEnabled, String liveId, ChatPlace liveChatIn, ChatPlace superChatIn, List<String> commandOnSuperChat, List<String> commandActions, boolean twitchEnabled, String channelName, ChatPlace twitchLiveChatIn, List<String> twitchCommandActions) {
+    public ConfigSettings(List<String> reminderList, SafeTimeUnit selectedTimeUnit, boolean enableReminders, int timeInterval, boolean censorIPAddress, boolean chatFilter, List<String> chatFilterMessages, String splitCharacter, int keyValue, boolean youtubeEnabled, String liveId, ChatPlace liveChatIn, ChatPlace donationsChatIn, List<String> commandsOnDonation, List<String> commandActions, boolean twitchEnabled, String channelName, ChatPlace twitchLiveChatIn, List<String> twitchCommandActions, , boolean streamLabs, boolean streamElements, String streamLabsToken, String streamElementsToken) {
         this.reminderList = reminderList;
         this.selectedTimeUnit = selectedTimeUnit;
         this.enableReminders = enableReminders;
@@ -49,9 +55,13 @@ public class ConfigSettings {
         this.youtubeEnabled = youtubeEnabled;
         this.liveId = liveId;
         this.liveChatIn = liveChatIn;
-        this.superChatIn = superChatIn;
-        this.commandOnSuperChat = commandOnSuperChat;
+        this.donationsChatIn = donationsChatIn;
+        this.commandsOnDonation = commandsOnDonation;
         this.commandActions = commandActions;
+        this.streamLabs = streamLabs;
+        this.streamElements = streamElements;
+        this.streamLabsToken = streamLabsToken;
+        this.streamElementsToken = streamElementsToken;
         this.twitchEnabled = twitchEnabled;
         this.channelName = channelName;
         this.twitchLiveChatIn = twitchLiveChatIn;
@@ -76,9 +86,17 @@ public class ConfigSettings {
         this.youtubeEnabled = false;
         this.liveId = "";
         this.liveChatIn = ChatPlace.NONE;
-        this.superChatIn = ChatPlace.REMINDER;
-        this.commandOnSuperChat = new ArrayList<>();
+        this.donationsChatIn = ChatPlace.REMINDER;
+        this.commandsOnDonation = new ArrayList<>();
         this.commandActions = new ArrayList<>();
+
+        //External Platforms
+        this.streamElements = false;
+        this.streamLabs = false;
+
+        //API KEYS
+        this.streamLabsToken = "";
+        this.streamElementsToken = "";
 
         //twitch
         this.twitchEnabled = false;

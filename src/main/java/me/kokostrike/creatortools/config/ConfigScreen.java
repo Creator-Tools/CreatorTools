@@ -62,7 +62,7 @@ public class ConfigScreen {
         //    General
         // Streamer Mode
         SubCategoryBuilder streamerModSub = entryBuilder.startSubCategory(Text.literal("Streamer Mode"));
-        streamerModSub.add(entryBuilder.startBooleanToggle(Text.literal("Censor IP Address"), configSettings.isCensorIPAddress())
+        streamerModSub.add(entryBuilder.startBooleanToggle(Text.literal("Censor Private information"), configSettings.isCensorIPAddress())
                 .setDefaultValue(false)
                 .setSaveConsumer(s -> configSettings.setCensorIPAddress(s))
                 .build());
@@ -137,7 +137,7 @@ public class ConfigScreen {
                         }catch (IndexOutOfBoundsException e) {
                             id = s;
                         }
-                        configSettings.setLiveId(s);
+                        configSettings.setLiveId(id);
                         return;
                     }
                     configSettings.setLiveId(s);
@@ -149,24 +149,47 @@ public class ConfigScreen {
                 .setSaveConsumer(s -> configSettings.setLiveChatIn(s))
                 .setTooltip(Text.literal("Showing the live chat in the chosen place."))
                 .build());
-        SubCategoryBuilder superChatEvents = entryBuilder.startSubCategory(Text.literal("Super Chat Events"));
-        superChatEvents.add(entryBuilder.startEnumSelector(Text.literal("Super Chat in"), ChatPlace.class, configSettings.getSuperChatIn())
+        SubCategoryBuilder donationEvents = entryBuilder.startSubCategory(Text.literal("Donation Events"));
+        donationEvents.add(entryBuilder.startEnumSelector(Text.literal("Donation in"), ChatPlace.class, configSettings.getDonationsChatIn())
                 .setDefaultValue(ChatPlace.REMINDER)
-                .setSaveConsumer(s -> configSettings.setSuperChatIn(s))
+                .setSaveConsumer(s -> configSettings.setDonationsChatIn(s))
                 .setTooltip(Text.literal("Showing the super chat in the chosen place."))
                 .build());
-        superChatEvents.add(entryBuilder.startStrList(Text.literal("Commands on Super Chat"), configSettings.getCommandOnSuperChat())
+        donationEvents.add(entryBuilder.startBooleanToggle(Text.literal("StreamLabs"), configSettings.isStreamLabs())
+                .setDefaultValue(false)
+                .setSaveConsumer(configSettings::setStreamLabs)
+                .setTooltip(Text.literal("Is streamlabs enabled"))
+                .build());
+        donationEvents.add(entryBuilder.startBooleanToggle(Text.literal("StreamElements"), configSettings.isStreamElements())
+                .setDefaultValue(false)
+                .setSaveConsumer(configSettings::setStreamElements)
+                .setTooltip(Text.literal("Is StreamElements enabled"))
+                .build());
+        donationEvents.add(entryBuilder.startStrList(Text.literal("Commands on Donations"), configSettings.getCommandsOnDonation())
                 .setDefaultValue(new ArrayList<>())
-                .setSaveConsumer(s -> configSettings.setCommandOnSuperChat(s))
+                .setSaveConsumer(s -> configSettings.setCommandsOnDonation(s))
                 .setTooltip(Text.of("Run a command when a super chat occurs.\nFormat: 'amount(example: 5)'" + configSettings.getSplitCharacter() + "'Command(example:gamemode creative)'"))
                 .build());
-        youtube.addEntry(superChatEvents.build());
+        youtube.addEntry(donationEvents.build());
 
         youtube.addEntry(entryBuilder.startStrList(Text.literal("Command Actions"), configSettings.getCommandActions())
                 .setDefaultValue(new ArrayList<>())
                 .setSaveConsumer(s -> configSettings.setCommandActions(s))
                 .setTooltip(Text.of("Run a command when a action is sent.\nFormat: 'action(example: !creeper)'" + configSettings.getSplitCharacter() + "'Command(example:summon ~ ~ ~ creeper)'"))
                 .build());
+        if (!configSettings.isCensorIPAddress()) {
+            ConfigCategory API_KEYS = builder.getOrCreateCategory(Text.literal("API KEYS"));
+            API_KEYS.addEntry(entryBuilder.startStrField(Text.literal("StreamLabs socket key"), configSettings.getStreamLabsToken())
+                    .setDefaultValue("")
+                    .setSaveConsumer(configSettings::setStreamLabsToken)
+                    .setTooltip(Text.of("Socket token used to get StreamLabs donations"))
+                    .build());
+            API_KEYS.addEntry(entryBuilder.startStrField(Text.literal("StreamElements JWT"), configSettings.getStreamElementsToken())
+                    .setDefaultValue("")
+                    .setSaveConsumer(configSettings::setStreamElementsToken)
+                    .setTooltip(Text.of("JWT token used to get StreamElements donations"))
+                    .build());
+        }
         if (mod.getTwitchManager() != null) {
             //Twitch
             ConfigCategory twitch = builder.getOrCreateCategory(Text.literal("Twitch"));
@@ -194,7 +217,6 @@ public class ConfigScreen {
         }
 
         screen = builder.build();
-
     }
     public void buildAndOpen() {
         build(MinecraftClient.getInstance().currentScreen);
