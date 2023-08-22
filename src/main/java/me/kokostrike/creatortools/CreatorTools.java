@@ -65,7 +65,7 @@ public class CreatorTools implements ModInitializer {
 		streamerModeManager = new StreamerModeManager();
         reminderManager = new ReminderManager();
 		youTubeManager = new YouTubeManager();
-		if (FabricLoader.getInstance().isModLoaded("twitch4j")) twitchManager = new TwitchManager();
+		if (FabricLoader.getInstance().isModLoaded("twitch4j")) twitchManager = new TwitchManager(this);
 	}
 
 	private void loadCommands() {

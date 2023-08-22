@@ -6,6 +6,7 @@ import com.github.kusaanko.youtubelivechat.IdType;
 import com.github.kusaanko.youtubelivechat.YouTubeLiveChat;
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import lombok.Getter;
 import me.kokostrike.creatortools.config.ConfigSettings;
 import me.kokostrike.creatortools.config.ConfigSettingsProvider;
 import me.kokostrike.creatortools.enums.ChatPlace;
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class YouTubeManager {
     private ScheduledExecutorService executor;
     private ConfigSettings configSettings;
+    @Getter
     private Map<String, ActionCommand> actionCommands;
     private Map<String, String> donationCommands;
 
@@ -38,9 +40,9 @@ public class YouTubeManager {
         this.actionCommands = listToActionCommands(configSettings.getCommandActions());
         this.donationCommands = listToMap(configSettings.getCommandsOnDonation());
 
-        if (configSettings.isYoutubeEnabled()) {
-            start();
-        }
+        if (configSettings.isYoutubeEnabled()) start();
+        if (configSettings.isStreamElements()) startStreamElements();
+        if (configSettings.isStreamLabs()) startStreamLabs();
     }
 
     private Map<String, String> listToMap(List<String> list) {
@@ -138,7 +140,9 @@ public class YouTubeManager {
         }catch (IllegalArgumentException | IOException e) {
             showToast("Error!", "Invalid Live ID");
         }
+    }
 
+    private void startStreamLabs() {
         try {
             if (configSettings.isStreamLabs() && !configSettings.getStreamLabsToken().isEmpty()) {
                 streamLabsSocket = IO.socket("https://sockets.streamlabs.com?token=" + configSettings.getStreamLabsToken());
@@ -150,7 +154,9 @@ public class YouTubeManager {
         } catch (URISyntaxException e) {
             showToast("StreamLabs error!", "Socket key is invalid!");
         }
+    }
 
+    private void startStreamElements() {
         try {
             if (configSettings.isStreamElements() && !configSettings.getStreamElementsToken().isEmpty()) {
                 streamElementsSocket = IO.socket("https://realtime.streamelements.com", IO.Options.builder().setTransports(new String[]{"websocket"}).build());
@@ -191,6 +197,8 @@ public class YouTubeManager {
     private void restart() {
         stop();
         if (configSettings.isYoutubeEnabled()) start();
+        if (configSettings.isStreamElements()) startStreamElements();
+        if (configSettings.isStreamLabs()) startStreamLabs();
     }
 
     public void update() {

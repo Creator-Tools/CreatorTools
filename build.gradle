@@ -14,6 +14,9 @@ shadowJar {
 	destinationDirectory = file("$rootDir/output")
 	dependencies {
 		include(dependency("com.github.kusaanko:YouTubeLiveChat:1.5"))
+		include(dependency("io.socket:socket.io-client:2.1.0"))
+		include(dependency("io.socket:engine.io-client:2.1.0"))
+		include(dependency("org.json:json:20090211"))
 	}
 }
 
@@ -72,7 +75,7 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.8.7'
 //	compileOnly "com.github.kusaanko:YouTubeLiveChat:1.5"
 //	implementation "com.github.twitch4j:twitch4j:1.16.0"
-	implementation "io.socket:socket.io-client:2.1.0"
+//	implementation "io.socket:socket.io-client:2.1.0"
 
 	compileOnly 'org.projectlombok:lombok:1.18.28'
 	annotationProcessor 'org.projectlombok:lombok:1.18.28'
@@ -97,6 +100,7 @@ dependencies {
 	modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:1.1.2")
 	
 	include modApi("com.github.kusaanko:YouTubeLiveChat:1.5")
+	include modApi("io.socket:socket.io-client:2.1.0")
 
 	modCompileOnly "com.github.twitch4j:twitch4j-fabric:1.16.0+1.2.0"
 

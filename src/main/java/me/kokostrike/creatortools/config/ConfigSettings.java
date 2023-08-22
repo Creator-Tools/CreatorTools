@@ -40,9 +40,8 @@ public class ConfigSettings {
     private boolean twitchEnabled;
     private String channelName;
     private ChatPlace twitchLiveChatIn;
-    private List<String> twitchCommandActions;
 
-    public ConfigSettings(List<String> reminderList, SafeTimeUnit selectedTimeUnit, boolean enableReminders, int timeInterval, boolean censorIPAddress, boolean chatFilter, List<String> chatFilterMessages, String splitCharacter, int keyValue, boolean youtubeEnabled, String liveId, ChatPlace liveChatIn, ChatPlace donationsChatIn, List<String> commandsOnDonation, List<String> commandActions, boolean twitchEnabled, String channelName, ChatPlace twitchLiveChatIn, List<String> twitchCommandActions, boolean streamLabs, boolean streamElements, String streamLabsToken, String streamElementsToken) {
+    public ConfigSettings(List<String> reminderList, SafeTimeUnit selectedTimeUnit, boolean enableReminders, int timeInterval, boolean censorIPAddress, boolean chatFilter, List<String> chatFilterMessages, String splitCharacter, int keyValue, boolean youtubeEnabled, String liveId, ChatPlace liveChatIn, ChatPlace donationsChatIn, List<String> commandsOnDonation, List<String> commandActions, boolean twitchEnabled, String channelName, ChatPlace twitchLiveChatIn, boolean streamLabs, boolean streamElements, String streamLabsToken, String streamElementsToken) {
         this.reminderList = reminderList;
         this.selectedTimeUnit = selectedTimeUnit;
         this.enableReminders = enableReminders;
@@ -65,7 +64,6 @@ public class ConfigSettings {
         this.twitchEnabled = twitchEnabled;
         this.channelName = channelName;
         this.twitchLiveChatIn = twitchLiveChatIn;
-        this.twitchCommandActions = twitchCommandActions;
     }
 
     public ConfigSettings() {
@@ -102,6 +100,5 @@ public class ConfigSettings {
         this.twitchEnabled = false;
         this.channelName = "";
         this.twitchLiveChatIn = ChatPlace.NONE;
-        this.twitchCommandActions = new ArrayList<>();
     }
 }
