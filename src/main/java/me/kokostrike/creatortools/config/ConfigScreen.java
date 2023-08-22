@@ -52,6 +52,7 @@ public class ConfigScreen {
             ConfigSettingsProvider.updateSettings(configSettings);
             mod.getReminderManager().updateConfig();
             mod.getYouTubeManager().update();
+            if (mod.getTwitchManager() != null )mod.getTwitchManager().update();
             CreatorTools.getKeyInputHandler().update();
         });
 
@@ -112,14 +113,18 @@ public class ConfigScreen {
                 .setTooltip(Text.of("Reminders to be displayed in the screen every couple of minutes.\nFormat: 'Title'" + configSettings.getSplitCharacter() + "'Subtitle'"))
                 .build());
 
-        ConfigCategory youtube = builder.getOrCreateCategory(Text.literal("Youtube"));
-        youtube.addEntry(entryBuilder.startBooleanToggle(Text.literal("Enabled"), configSettings.isYoutubeEnabled())
+        ConfigCategory streaming = builder.getOrCreateCategory(Text.literal("Streaming"));
+
+        //YouTube
+
+        SubCategoryBuilder youtubeSubCategory = entryBuilder.startSubCategory(Text.literal("YouTube"));
+        youtubeSubCategory.add(entryBuilder.startBooleanToggle(Text.literal("Enabled"), configSettings.isYoutubeEnabled())
                 .setDefaultValue(false)
                 .setSaveConsumer(s -> configSettings.setYoutubeEnabled(s))
                 .setTooltip(Text.literal("Is the YouTube feature enabled?"))
                 .build());
 
-        youtube.addEntry(entryBuilder.startStrField(Text.literal("Live ID"), configSettings.getLiveId())
+        youtubeSubCategory.add(entryBuilder.startStrField(Text.literal("Live ID"), configSettings.getLiveId())
                 .setDefaultValue("")
                 .setSaveConsumer(s -> {
                     if (s.contains("http") || s.contains("youtube.com")) {
@@ -143,11 +148,32 @@ public class ConfigScreen {
                 })
                 .setTooltip(Text.literal("The live ID"))
                 .build());
-        youtube.addEntry(entryBuilder.startEnumSelector(Text.literal("Live Chat in"), ChatPlace.class, configSettings.getLiveChatIn())
+        youtubeSubCategory.add(entryBuilder.startEnumSelector(Text.literal("Live Chat in"), ChatPlace.class, configSettings.getLiveChatIn())
                 .setDefaultValue(ChatPlace.NONE)
                 .setSaveConsumer(s -> configSettings.setLiveChatIn(s))
                 .setTooltip(Text.literal("Showing the live chat in the chosen place."))
                 .build());
+        streaming.addEntry(youtubeSubCategory.build());
+        //Twitch
+        if (mod.getTwitchManager() != null) {
+            SubCategoryBuilder twitchSubCategory = entryBuilder.startSubCategory(Text.literal("Twitch"));
+            twitchSubCategory.add(entryBuilder.startBooleanToggle(Text.literal("Enabled"), configSettings.isTwitchEnabled())
+                    .setDefaultValue(false)
+                    .setSaveConsumer(s -> configSettings.setTwitchEnabled(s))
+                    .setTooltip(Text.literal("Is the Twitch feature enabled?"))
+                    .build());
+            twitchSubCategory.add(entryBuilder.startStrField(Text.literal("Channel Name"), configSettings.getChannelName())
+                    .setDefaultValue("")
+                    .setSaveConsumer(s -> configSettings.setChannelName(s))
+                    .setTooltip(Text.literal("The Channel Name"))
+                    .build());
+            twitchSubCategory.add(entryBuilder.startEnumSelector(Text.literal("Live Chat in"), ChatPlace.class, configSettings.getTwitchLiveChatIn())
+                    .setDefaultValue(ChatPlace.NONE)
+                    .setSaveConsumer(s -> configSettings.setTwitchLiveChatIn(s))
+                    .setTooltip(Text.literal("Showing the live chat in the chosen place."))
+                    .build());
+            streaming.addEntry(twitchSubCategory.build());
+        }
         SubCategoryBuilder donationEvents = entryBuilder.startSubCategory(Text.literal("Donation Events"));
         donationEvents.add(entryBuilder.startEnumSelector(Text.literal("Donation in"), ChatPlace.class, configSettings.getDonationsChatIn())
                 .setDefaultValue(ChatPlace.REMINDER)
@@ -169,9 +195,9 @@ public class ConfigScreen {
                 .setSaveConsumer(s -> configSettings.setCommandsOnDonation(s))
                 .setTooltip(Text.of("Run a command when a super chat occurs.\nFormat: 'amount(example: 5)'" + configSettings.getSplitCharacter() + "'Command(example:gamemode creative)'"))
                 .build());
-        youtube.addEntry(donationEvents.build());
+        streaming.addEntry(donationEvents.build());
 
-        youtube.addEntry(entryBuilder.startStrList(Text.literal("Command Actions"), configSettings.getCommandActions())
+        streaming.addEntry(entryBuilder.startStrList(Text.literal("Command Actions"), configSettings.getCommandActions())
                 .setDefaultValue(new ArrayList<>())
                 .setSaveConsumer(s -> configSettings.setCommandActions(s))
                 .setTooltip(Text.of("Run a command when a action is sent.\nFormat: 'action(example: !creeper)'" + configSettings.getSplitCharacter() + "'Command(example:summon ~ ~ ~ creeper)'"))

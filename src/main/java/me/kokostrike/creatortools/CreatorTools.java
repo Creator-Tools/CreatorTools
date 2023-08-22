@@ -7,9 +7,11 @@ import me.kokostrike.creatortools.config.ConfigSettingsProvider;
 import me.kokostrike.creatortools.event.KeyInputHandler;
 import me.kokostrike.creatortools.managers.StreamerModeManager;
 import me.kokostrike.creatortools.managers.ReminderManager;
+import me.kokostrike.creatortools.managers.TwitchManager;
 import me.kokostrike.creatortools.managers.YouTubeManager;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,9 @@ public class CreatorTools implements ModInitializer {
 
 	@Getter
 	private YouTubeManager youTubeManager;
+
+	@Getter
+	private TwitchManager twitchManager;
 
 	@Getter
 	private static KeyInputHandler keyInputHandler;
@@ -60,6 +65,7 @@ public class CreatorTools implements ModInitializer {
 		streamerModeManager = new StreamerModeManager();
         reminderManager = new ReminderManager();
 		youTubeManager = new YouTubeManager();
+		if (FabricLoader.getInstance().isModLoaded("twitch4j")) twitchManager = new TwitchManager(this);
 	}
 
 	private void loadCommands() {

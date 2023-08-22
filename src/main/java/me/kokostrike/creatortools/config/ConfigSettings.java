@@ -36,7 +36,12 @@ public class ConfigSettings {
     private String streamLabsToken;
     private String streamElementsToken;
 
-    public ConfigSettings(List<String> reminderList, SafeTimeUnit selectedTimeUnit, boolean enableReminders, int timeInterval, boolean censorIPAddress, boolean chatFilter, List<String> chatFilterMessages, String splitCharacter, int keyValue, boolean youtubeEnabled, String liveId, ChatPlace liveChatIn, ChatPlace donationsChatIn, List<String> commandsOnDonation, List<String> commandActions, boolean streamLabs, boolean streamElements, String streamLabsToken, String streamElementsToken) {
+    //Twitch settings
+    private boolean twitchEnabled;
+    private String channelName;
+    private ChatPlace twitchLiveChatIn;
+
+    public ConfigSettings(List<String> reminderList, SafeTimeUnit selectedTimeUnit, boolean enableReminders, int timeInterval, boolean censorIPAddress, boolean chatFilter, List<String> chatFilterMessages, String splitCharacter, int keyValue, boolean youtubeEnabled, String liveId, ChatPlace liveChatIn, ChatPlace donationsChatIn, List<String> commandsOnDonation, List<String> commandActions, boolean twitchEnabled, String channelName, ChatPlace twitchLiveChatIn, boolean streamLabs, boolean streamElements, String streamLabsToken, String streamElementsToken) {
         this.reminderList = reminderList;
         this.selectedTimeUnit = selectedTimeUnit;
         this.enableReminders = enableReminders;
@@ -56,6 +61,9 @@ public class ConfigSettings {
         this.streamElements = streamElements;
         this.streamLabsToken = streamLabsToken;
         this.streamElementsToken = streamElementsToken;
+        this.twitchEnabled = twitchEnabled;
+        this.channelName = channelName;
+        this.twitchLiveChatIn = twitchLiveChatIn;
     }
 
     public ConfigSettings() {
@@ -87,5 +95,10 @@ public class ConfigSettings {
         //API KEYS
         this.streamLabsToken = "";
         this.streamElementsToken = "";
+
+        //twitch
+        this.twitchEnabled = false;
+        this.channelName = "";
+        this.twitchLiveChatIn = ChatPlace.NONE;
     }
 }
