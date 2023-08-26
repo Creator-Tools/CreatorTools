@@ -105,8 +105,11 @@ public class YouTubeManager {
         if (!configSettings.getCommandsOnDonation().isEmpty()) {
             System.out.println(getIntAmount(amount));
             if (donationCommands.containsKey(getIntAmount(amount)))
-                runCommand(donationCommands.get(getIntAmount(amount)));
+                runCommand(defaultParametersEdit(donationCommands.get(getIntAmount(amount)), author, amount, message));
         }
+    }
+    private String defaultParametersEdit(String toEdit, String name, String amount, String message) {
+        return toEdit.replace("{name}", name).replace("{amount}", amount).replace("{message}", message);
     }
 
     private void start() {
@@ -120,7 +123,7 @@ public class YouTubeManager {
                     for (ChatItem item : chat.getChatItems()) {
                         if (item.getType().equals(ChatItemType.MESSAGE)) {
                             if (actionCommands.containsKey(item.getMessage().split(" ")[0])) {
-                                actionCommands.get(item.getMessage().split(" ")[0]).run(item.getMessage());
+                                actionCommands.get(item.getMessage().split(" ")[0]).run(item.getMessage(), item.getAuthorName());
                                 continue;
                             }
                             if (configSettings.getLiveChatIn().equals(ChatPlace.NONE)) continue;
