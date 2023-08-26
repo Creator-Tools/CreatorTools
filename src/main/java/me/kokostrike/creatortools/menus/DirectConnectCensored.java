@@ -12,16 +12,18 @@ import net.minecraft.text.Text;
 
 public class DirectConnectCensored extends DirectConnectScreen {
 
+    private final String message;
 
-    public DirectConnectCensored(Screen parent, BooleanConsumer callback, ServerInfo server) {
+    public DirectConnectCensored(Screen parent, BooleanConsumer callback, ServerInfo server, String message) {
         super(parent, callback, server);
+        this.message = message;
     }
 
     @Override
     protected void init() {
         this.addressField = new TextFieldWidget(this.textRenderer, this.width / 2 - 100, 116, 200, 20, Text.translatable("addServer.enterIp"));
         this.addressField.setMaxLength(128);
-        this.addressField.setText("Streamer Mode is Enabled!");
+        this.addressField.setText(message);
         this.addressField.setChangedListener(text -> this.onAddressFieldChanged());
         this.addSelectableChild(this.addressField);
         this.selectServerButton = this.addDrawableChild(ButtonWidget.builder(Text.translatable("selectServer.select"), button -> this.saveAndClose()).dimensions(this.width / 2 - 100, this.height / 4 + 96 + 12, 200, 20).build());
