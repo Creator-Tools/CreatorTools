@@ -51,7 +51,7 @@ public class TwitchManager {
         if (!configSettings.isTwitchEnabled()) return;
 
         if (actionCommands.containsKey(event.getMessage().split(" ")[0])) {
-            actionCommands.get(event.getMessage().split(" ")[0]).run(event.getMessage());
+            actionCommands.get(event.getMessage().split(" ")[0]).run(event.getMessage(), event.getMessageEvent().getUserDisplayName().get());
             return;
         }
 

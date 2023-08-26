@@ -18,6 +18,7 @@ public class ActionCommand {
 
     private final String commandToRun;
 
+
     public ActionCommand(String splitCharacter, String fieldInput) {
         String[] commands = fieldInput.split(splitCharacter);
         tokens = new HashMap<>();
@@ -34,7 +35,8 @@ public class ActionCommand {
         this.commandToRun = commands[1];
     }
 
-    public void run(String input) {
+
+    public void run(String input, String name) {
         //!mob $mob/summon $mob ~ ~ ~
         //!mob zombie -> summon $mob ~ ~ ~
         String[] inputParts = input.split(" ");
@@ -46,24 +48,23 @@ public class ActionCommand {
             index++;
         }
 
-        if (toReplace.isEmpty()) runCommand(commandToRun);
+        String editedCommand = defaultParametersEdit(commandToRun, name);
+
+        if (toReplace.isEmpty()) runCommand(editedCommand);
         else {
-            String editedCommandToRun = commandToRun;
+            String editedCommandToRun = editedCommand;
             for (Map.Entry<String, String> entry : toReplace.entrySet()) {
                 editedCommandToRun = editedCommandToRun.replace(entry.getKey(), entry.getValue().replace("-", "_"));
             }
             runCommand(editedCommandToRun);
         }
-
     }
 
-    private String joinList(List<String> parts, String addon) {
-        String finalString = "";
-        for (String part : parts) {
-            finalString = addon + part;
-        }
-        return finalString.replaceFirst(addon, "");
+
+    private String defaultParametersEdit(String toEdit, String name) {
+        return toEdit.replace("{name}", name);
     }
+
 
     private void runCommand(String command) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
