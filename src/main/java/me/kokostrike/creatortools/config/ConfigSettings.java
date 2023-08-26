@@ -17,6 +17,7 @@ public class ConfigSettings {
 
     //general settings
     private boolean censorIPAddress;
+    private String censorMessage;
     private boolean chatFilter;
     private List<String> chatFilterMessages;
     private String splitCharacter;
@@ -41,12 +42,13 @@ public class ConfigSettings {
     private String channelName;
     private ChatPlace twitchLiveChatIn;
 
-    public ConfigSettings(List<String> reminderList, SafeTimeUnit selectedTimeUnit, boolean enableReminders, int timeInterval, boolean censorIPAddress, boolean chatFilter, List<String> chatFilterMessages, String splitCharacter, int keyValue, boolean youtubeEnabled, String liveId, ChatPlace liveChatIn, ChatPlace donationsChatIn, List<String> commandsOnDonation, List<String> commandActions, boolean twitchEnabled, String channelName, ChatPlace twitchLiveChatIn, boolean streamLabs, boolean streamElements, String streamLabsToken, String streamElementsToken) {
+    public ConfigSettings(List<String> reminderList, SafeTimeUnit selectedTimeUnit, boolean enableReminders, int timeInterval, boolean censorIPAddress, boolean chatFilter, List<String> chatFilterMessages, String splitCharacter, int keyValue, boolean youtubeEnabled, String liveId, ChatPlace liveChatIn, ChatPlace donationsChatIn, List<String> commandsOnDonation, List<String> commandActions, boolean twitchEnabled, String channelName, ChatPlace twitchLiveChatIn, boolean streamLabs, boolean streamElements, String streamLabsToken, String streamElementsToken, String censorMessage) {
         this.reminderList = reminderList;
         this.selectedTimeUnit = selectedTimeUnit;
         this.enableReminders = enableReminders;
         this.timeInterval = timeInterval;
         this.censorIPAddress = censorIPAddress;
+        this.censorMessage = censorMessage;
         this.chatFilter = chatFilter;
         this.chatFilterMessages = chatFilterMessages;
         this.splitCharacter = splitCharacter;
@@ -75,6 +77,7 @@ public class ConfigSettings {
 
         //general settings
         this.censorIPAddress = false;
+        this.censorMessage = "Streamer mod is enabled!";
         this.chatFilter = false;
         this.chatFilterMessages = new ArrayList<>();
         this.splitCharacter = "/";

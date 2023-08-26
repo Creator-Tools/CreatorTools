@@ -16,8 +16,10 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 public class MultiplayerScreenCensored extends MultiplayerScreen {
-    public MultiplayerScreenCensored(MultiplayerScreen screen) {
+    private final String message;
+    public MultiplayerScreenCensored(MultiplayerScreen screen, String message) {
         super(screen.parent);
+        this.message = message;
     }
 
     @Override
@@ -42,7 +44,7 @@ public class MultiplayerScreenCensored extends MultiplayerScreen {
         this.buttonJoin = this.addDrawableChild(ButtonWidget.builder(Text.translatable("selectServer.select"), button -> this.connect()).width(100).build());
         ButtonWidget buttonWidget = this.addDrawableChild(ButtonWidget.builder(Text.translatable("selectServer.direct"), button -> {
             this.selectedEntry = new ServerInfo(I18n.translate("selectServer.defaultName", new Object[0]), "", false);
-            this.client.setScreen(new DirectConnectCensored(this, this::directConnect, this.selectedEntry));
+            this.client.setScreen(new DirectConnectCensored(this, this::directConnect, this.selectedEntry, message));
         }).width(100).build());
         ButtonWidget buttonWidget2 = this.addDrawableChild(ButtonWidget.builder(Text.translatable("selectServer.add"), button -> {
             this.selectedEntry = new ServerInfo(I18n.translate("selectServer.defaultName", new Object[0]), "", false);
@@ -54,7 +56,7 @@ public class MultiplayerScreenCensored extends MultiplayerScreen {
                 ServerInfo serverInfo = ((MultiplayerServerListWidget.ServerEntry)entry).getServer();
                 this.selectedEntry = new ServerInfo(serverInfo.name, serverInfo.address, false);
                 this.selectedEntry.copyWithSettingsFrom(serverInfo);
-                this.client.setScreen(new AddServerScreen(this, this::editEntry, new ServerInfo(this.selectedEntry.name, "Streamer Mode is Enabled!", false)));
+                this.client.setScreen(new AddServerScreen(this, this::editEntry, new ServerInfo(this.selectedEntry.name, message, false)));
             }
         }).width(74).build());
         this.buttonDelete = this.addDrawableChild(ButtonWidget.builder(Text.translatable("selectServer.delete"), button -> {

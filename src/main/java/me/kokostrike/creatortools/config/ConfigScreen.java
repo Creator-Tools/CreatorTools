@@ -66,6 +66,10 @@ public class ConfigScreen {
                 .setDefaultValue(false)
                 .setSaveConsumer(s -> configSettings.setCensorIPAddress(s))
                 .build());
+        streamerModSub.add(entryBuilder.startStrField(Text.literal("Censor Message"), configSettings.getCensorMessage())
+                .setDefaultValue("Streamer mod is enabled")
+                .setSaveConsumer(configSettings::setCensorMessage)
+                .build());
         streamerModSub.add(entryBuilder.startBooleanToggle(Text.literal("Chat Filter"), configSettings.isChatFilter())
                 .setDefaultValue(false)
                 .setSaveConsumer(s -> configSettings.setChatFilter(s))

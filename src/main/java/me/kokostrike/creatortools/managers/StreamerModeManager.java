@@ -15,7 +15,7 @@ public class StreamerModeManager {
             if (!configSettings.isCensorIPAddress()) return;
 
             if (!(listener.currentScreen instanceof MultiplayerScreenCensored) && listener.currentScreen instanceof MultiplayerScreen realScreen ) {
-                listener.setScreen(new MultiplayerScreenCensored(realScreen));
+                listener.setScreen(new MultiplayerScreenCensored(realScreen, configSettings.getCensorMessage()));
             }
         });
 
