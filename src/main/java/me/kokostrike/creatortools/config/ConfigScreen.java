@@ -65,6 +65,7 @@ public class ConfigScreen {
         streamerModSub.add(entryBuilder.startBooleanToggle(Text.literal("Censor Private information"), configSettings.isCensorIPAddress())
                 .setDefaultValue(false)
                 .setSaveConsumer(s -> configSettings.setCensorIPAddress(s))
+                .setTooltip(Text.of("Censor IP Addresses, hide the API Keys tab."))
                 .build());
         streamerModSub.add(entryBuilder.startStrField(Text.literal("Censor Message"), configSettings.getCensorMessage())
                 .setDefaultValue("Streamer mod is enabled")
@@ -99,7 +100,7 @@ public class ConfigScreen {
                 .setSaveConsumer(s -> configSettings.setEnableReminders(s))
                 .build());
 
-        reminders.addEntry(entryBuilder.startIntField(Text.literal("Reminder Interval"), configSettings.getTimeInterval())
+        reminders.addEntry(entryBuilder.startIntField(Text.literal("Reminder Interval (Interval)"), configSettings.getTimeInterval())
                 .setDefaultValue(5)
                 .setSaveConsumer(s -> configSettings.setTimeInterval(s))
                 .setTooltip(Text.of("Interval between reminders."))
@@ -164,12 +165,12 @@ public class ConfigScreen {
             twitchSubCategory.add(entryBuilder.startBooleanToggle(Text.literal("Enabled"), configSettings.isTwitchEnabled())
                     .setDefaultValue(false)
                     .setSaveConsumer(s -> configSettings.setTwitchEnabled(s))
-                    .setTooltip(Text.literal("Is the Twitch feature enabled?"))
+                    .setTooltip(Text.literal("Is Twitch integration enabled?"))
                     .build());
             twitchSubCategory.add(entryBuilder.startStrField(Text.literal("Channel Name"), configSettings.getChannelName())
                     .setDefaultValue("")
                     .setSaveConsumer(s -> configSettings.setChannelName(s))
-                    .setTooltip(Text.literal("The Channel Name"))
+                    .setTooltip(Text.literal("Your Channel Name on Twitch."))
                     .build());
             twitchSubCategory.add(entryBuilder.startEnumSelector(Text.literal("Live Chat in"), ChatPlace.class, configSettings.getTwitchLiveChatIn())
                     .setDefaultValue(ChatPlace.NONE)
@@ -179,25 +180,25 @@ public class ConfigScreen {
             streaming.addEntry(twitchSubCategory.build());
         }
         SubCategoryBuilder donationEvents = entryBuilder.startSubCategory(Text.literal("Donation Events"));
-        donationEvents.add(entryBuilder.startEnumSelector(Text.literal("Donation in"), ChatPlace.class, configSettings.getDonationsChatIn())
+        donationEvents.add(entryBuilder.startEnumSelector(Text.literal("Notify donation in"), ChatPlace.class, configSettings.getDonationsChatIn())
                 .setDefaultValue(ChatPlace.REMINDER)
                 .setSaveConsumer(s -> configSettings.setDonationsChatIn(s))
-                .setTooltip(Text.literal("Showing the super chat in the chosen place."))
+                .setTooltip(Text.literal("Choose where to notify about upcoming donations."))
                 .build());
         donationEvents.add(entryBuilder.startBooleanToggle(Text.literal("StreamLabs"), configSettings.isStreamLabs())
                 .setDefaultValue(false)
                 .setSaveConsumer(configSettings::setStreamLabs)
-                .setTooltip(Text.literal("Is streamlabs enabled"))
+                .setTooltip(Text.literal("Enable StreamLabs Integration"))
                 .build());
         donationEvents.add(entryBuilder.startBooleanToggle(Text.literal("StreamElements"), configSettings.isStreamElements())
                 .setDefaultValue(false)
                 .setSaveConsumer(configSettings::setStreamElements)
-                .setTooltip(Text.literal("Is StreamElements enabled"))
+                .setTooltip(Text.literal("Enable StreamElements Integration"))
                 .build());
-        donationEvents.add(entryBuilder.startStrList(Text.literal("Commands on Donations"), configSettings.getCommandsOnDonation())
+        donationEvents.add(entryBuilder.startStrList(Text.literal("Commands on Donations Goals"), configSettings.getCommandsOnDonation())
                 .setDefaultValue(new ArrayList<>())
                 .setSaveConsumer(s -> configSettings.setCommandsOnDonation(s))
-                .setTooltip(Text.of("Run a command when a super chat occurs.\nFormat: 'amount(example: 5)'" + configSettings.getSplitCharacter() + "'Command(example:gamemode creative)'"))
+                .setTooltip(Text.of("Run a command when a donation occurs.\nFormat: 'amount(example: 5)'" + configSettings.getSplitCharacter() + "'Command(example:gamemode creative)'"))
                 .build());
         streaming.addEntry(donationEvents.build());
 
@@ -218,6 +219,7 @@ public class ConfigScreen {
                     .setSaveConsumer(configSettings::setStreamElementsToken)
                     .setTooltip(Text.of("JWT token used to get StreamElements donations"))
                     .build());
+
         }
 
         screen = builder.build();
