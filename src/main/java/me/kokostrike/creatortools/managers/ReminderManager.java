@@ -38,7 +38,10 @@ public class ReminderManager {
                 return;
             }
             String[] toast = toastText.split(configSettings.getSplitCharacter());
-            showToast(toast[0], toast[1]);
+            if (toast.length < 2)
+                showToast(toast[0], "");
+            else
+                showToast(toast[0], toast[1]);
             index++;
         },0, configSettings.getTimeInterval(), TimeUnit.valueOf(configSettings.getSelectedTimeUnit().toString()));
     }

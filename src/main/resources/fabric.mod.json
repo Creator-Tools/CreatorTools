@@ -10,7 +10,8 @@
 	],
 	"contact": {
 		"homepage": "https://discord.gg/uQrQ9JPhsh",
-		"sources": "https://github.com/KokoDevs/CreatorTools"
+		"sources": "https://github.com/KokoDevs/CreatorTools",
+		"issues": "https://github.com/KokoDevs/CreatorTools/issues"
 	},
 	"license": "GNU General Public License v3.0",
 	"icon": "assets/creatortools/icon.png",

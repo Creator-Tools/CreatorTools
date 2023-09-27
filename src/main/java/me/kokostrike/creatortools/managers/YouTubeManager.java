@@ -54,6 +54,10 @@ public class YouTubeManager {
                 continue;
             }
             String[] parts = s.split(configSettings.getSplitCharacter());
+            if (parts.length < 2) {
+                toRemove.add(s);
+                continue;
+            }
             map.put(parts[0], parts[1]);
         }
         if (!toRemove.isEmpty()) {
@@ -69,6 +73,10 @@ public class YouTubeManager {
         List<String> toRemove = new ArrayList<>();
         for (String s : list) {
             if (s.isEmpty() || !s.contains(configSettings.getSplitCharacter())) {
+                toRemove.add(s);
+                continue;
+            }
+            if (s.split(configSettings.getSplitCharacter()).length < 2) {
                 toRemove.add(s);
                 continue;
             }
