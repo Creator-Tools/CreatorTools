@@ -1,5 +1,7 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
+Last update: September 27, 2023. Game Versions: 1.20.1–1.20.2 
+> **❗ Not Maintained Anymore, No Support will be Given.<br>You are more than welcome to fork this mod and use it! If you do so, we will appricate a pull request.❗**
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
 *** that would make this better, please fork the repo and create a pull request
@@ -24,6 +26,8 @@
 [![Issues][issues-shield]][issues-url]
 
 <!-- PROJECT LOGO -->
+
+<br>
 <br />
 <div align="center">
   <a href="https://github.com/KokoDevs/CreatorTools">
